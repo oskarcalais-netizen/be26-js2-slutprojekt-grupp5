@@ -7,7 +7,45 @@
     <title>be25-js2-slutprojekt-grupp5</title>
   </head>
   <body>
-    <div id="app" class="min-h-screen bg-cyan-500 "></div>
+    <!-- <div id="app" class="min-h-screen bg-cyan-500"></div> -->
+    <header>
+      <h1>D.O.Z</h1>
+      <p>Scrum Board</p>
+    </header>
+
+    <main>
+      <h2>Översikt</h2>
+
+      <section>
+        <h3>Projekt</h3>
+        <button id="newprojectbtn" type="button">Nytt projekt</button>
+
+        <div id="projectList">
+          <article>
+            <h4>Exempelprojekt</h4>
+            <p>Beskrivning av projektet.</p>
+            <p>Medlemmar: 3</p>
+            <p>Pågående uppgifter: 2</p>
+            <p>Deadline: 16 oktober 2026</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h3>Medlemmar</h3>
+        <button id="newmemberbtn" type="button">Ny medlem</button>
+
+        <ul id="memberList">
+          <li>
+            <h4>Exempelmedlem</h4>
+            <p>Kategori: UX</p>
+            <p>Projekt: Exempelprojekt</p>
+            <p>Pågående uppgifter: 1</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
