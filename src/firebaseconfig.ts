@@ -6,14 +6,13 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCh6cjaS-q6ww_dPsqK08bPhK8pPMGCAkA",
-  authDomain: "scrum-board-78c6b.firebaseapp.com",
-  databaseURL:
-    "https://scrum-board-78c6b-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "scrum-board-78c6b",
-  storageBucket: "scrum-board-78c6b.firebasestorage.app",
-  messagingSenderId: "942988826225",
-  appId: "1:942988826225:web:37f2260c511831dfc3edd0",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
