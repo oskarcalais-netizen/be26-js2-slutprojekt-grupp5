@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f3f4f6;
+  color: #222;
+}
+
+header {
+  padding: 20px;
+  background: #222;
+  color: white;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+section {
+  margin-top: 30px;
+}
+
+article,
+li {
+  margin-top: 15px;
+  padding: 15px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  padding: 10px 15px;
+  cursor: pointer;
+
+  background: #a8a9ad;
+  border-radius: 8px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3,
+h4 {
+  font-size: 18px;
+}
