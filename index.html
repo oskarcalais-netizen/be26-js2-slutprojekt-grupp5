@@ -24,43 +24,79 @@
     </header>
 
     <main class="min-h-screen bg-slate-950 px-6 py-10">
-      <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
+      <section id="overviewView">
 
-      <section id="projectsContainer" class="mb-12">
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
-          <button
-            id="newprojectbtn"
-            type="button"
-            class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
-          >
-            New project
-          </button>
-        </div>
+        <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
+  
+        <section id="projectsContainer" class="mb-12">
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
+            <button id="newprojectbtn" type="button"
+             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
+             shadow-lg shadow-indigo-600/20
+             transition hover:bg-indigo-300 hover:scale-105"
+    
+            >New project</button>
+  
+  
+          </div>
+  
+          <div id="projectList" class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
+          </div>
+        </section>
+  
+        <section id="membersContainer">
+           <div class="mb-5 flex items-center justify-between">
+  
+             <h3 class="text-2xl font-bold text-slate-100">Members</h3>
+             <button id="newmemberbtn" type="button"
+             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
+             shadow-lg shadow-indigo-600/20
+             transition hover:bg-indigo-300 hover:scale-105"
+               >New member</button>
+  
+           </div>
+  
+          <ul id="memberList"
+          class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
+           
+          </ul>
+        </section>
 
-        <div
-          id="projectList"
-          class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-        ></div>
       </section>
+      
+      <section id="projectView" class="hidden">
 
-      <section id="membersContainer">
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-2xl font-bold text-slate-100">Members</h3>
-          <button
-            id="newmemberbtn"
-            type="button"
-            class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
-          >
-            New member
-          </button>
-        </div>
+  <button
+    id="backToOverviewBtn"
+    type="button"
+    class="mb-8 text-indigo-400 hover:text-indigo-300"
+  >
+    ← Back to overview
+  </button>
 
-        <ul
-          id="memberList"
-          class="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-        ></ul>
-      </section>
+  <div id="projectDetails"></div>
+
+  <section class="mt-10">
+    <h3 class="mb-5 text-2xl font-bold text-slate-100">
+      Members
+    </h3>
+
+    <div
+      id="projectMembers"
+      class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
+    ></div>
+  </section>
+
+  <section class="mt-10">
+    <h3 class="mb-5 text-2xl font-bold text-slate-100">
+      Project Tasks
+    </h3>
+
+    <div id="projectTasks"></div>
+  </section>
+
+</section>
     </main>
 
     <div id="memberContainer"></div>
