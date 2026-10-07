@@ -20,6 +20,10 @@ function openMemberBox() {
           placeholder="Enter the member's name"
         />
 
+        <button id="addMemberBtn" type="button">
+          Add member
+        </button>
+        
         <button id="closeMemberBtn" type="button">
           Close
         </button>
@@ -86,6 +90,10 @@ function openProjectBox() {
 
         <h3>Members</h3>
         <div id="projectMemberOptions"></div>
+
+        <button id="addProjectBtn" type="button">
+          Add project
+        </button>
 
         <button id="closeProjectBtn" type="button">
           Close
