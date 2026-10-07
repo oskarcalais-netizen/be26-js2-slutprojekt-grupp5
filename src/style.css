@@ -82,3 +82,56 @@ button {
 .formBox button:hover {
   background: rgba(180, 175, 255, 0.75);
 }
+
+/* Styling för kategorival i "New member" boxen */
+.formBox select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  background: var(--color-slate-950);
+  color: var(--color-slate-100);
+  border: 1px solid var(--color-slate-600);
+  border-radius: 8px;
+}
+
+#memberMessage {
+  color: #fcd34d;
+}
+
+#memberCategory {
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1L6 6L11 1' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+/* --------------------------------------------- */
+/* Styling för medlemval i "New project" boxen */
+#projectMessage {
+  color: #fcd34d;
+}
+
+.formBox .projectMemberRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.formBox .projectMemberRow input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.formBox {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.formBox button:disabled {
+  opacity: 0.5;
+}
+/* --------------------------------------------- */
