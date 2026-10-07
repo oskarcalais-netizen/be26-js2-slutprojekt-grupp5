@@ -1,1 +1,84 @@
 @import "tailwindcss";
+
+button {
+  cursor: pointer;
+}
+
+/* Det mörka lagret bakom boxen. */
+.formOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.75);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gemensam styling för både medlemsboxen och projektboxen. */
+.formBox {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+
+  background: var(--color-slate-800);
+  color: var(--color-slate-100);
+  border-radius: 12px;
+  color-scheme: dark;
+}
+
+/* Boxens stora rubrik: "New member" eller "New project". */
+.formBox h2 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Namnen ovanför fälten och den mindre rubriken "Members". */
+.formBox label,
+.formBox h3 {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-slate-300);
+}
+
+/* Textfältet, datumfältet och beskrivningsfältet. */
+.formBox input,
+.formBox textarea {
+  display: block;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 12px;
+
+  background: var(--color-slate-950);
+  border: 1px solid var(--color-slate-600);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Beskrivningen får ändras i höjd, men inte i bredd. */
+.formBox textarea {
+  min-height: 200px;
+  max-width: 100%;
+  resize: vertical;
+}
+
+/* Close-knappen använder samma lila färg som sidans knappar. */
+.formBox button {
+  display: block;
+  width: 100%;
+  margin-top: 24px;
+  padding: 10px 16px;
+  background: var(--color-indigo-600);
+
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.formBox button:hover {
+  background: rgba(180, 175, 255, 0.75);
+}

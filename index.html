@@ -7,18 +7,21 @@
     <title>be25-js2-slutprojekt-grupp5</title>
   </head>
   <body>
-    
-    <header class="relative flex items-center h-20 px-6 bg-slate-900 border-b border-slate-800">
+    <header
+      class="relative flex items-center h-20 px-6 bg-slate-900 border-b border-slate-800"
+    >
+      <h1
+        class="absolute left-6 text-2xl font-black tracking-widest text-indigo-400"
+      >
+        D.O.Z
+      </h1>
 
-  <h1 class="absolute left-6 text-2xl font-black tracking-widest text-indigo-400">
-    D.O.Z
-  </h1>
-
-  <p class="w-full text-center text-xl font-semibold text-slate-100 tracking-wide">
-    Scrum Board
-  </p>
-
-</header>
+      <p
+        class="w-full text-center text-xl font-semibold text-slate-100 tracking-wide"
+      >
+        Scrum Board
+      </p>
+    </header>
 
     <main class="min-h-screen bg-slate-950 px-6 py-10">
       <section id="overviewView">
@@ -95,6 +98,9 @@
 
 </section>
     </main>
+
+    <div id="memberContainer"></div>
+    <div id="projectContainer"></div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
