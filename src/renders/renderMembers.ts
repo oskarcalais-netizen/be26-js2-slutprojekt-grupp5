@@ -21,12 +21,12 @@ export const renderMembers = (members) => {
     "mb-2 text-sm text-slate-400";
 
         const memberProject = document.createElement("p") as HTMLParagraphElement;
-        memberProject.textContent =  `Projects: ${member.projects?.join(", ") ?? "Inga projekt"}`;
+        memberProject.textContent =  `Projects: ${member.projects?.join(", ") ?? "No available projects"}`;
         memberProject.className =
     "mb-2 text-sm text-slate-400";
 
         const memberTasksTitle  = document.createElement("p") as HTMLParagraphElement;
-       memberTasksTitle.textContent = `Ongoing tasks: ${member.ongoingTasks.length} `;
+       memberTasksTitle.textContent = `Ongoing tasks: ${member.ongoingTasks.length ?? "No available tasks"}`;
 memberTasksTitle.className =
     "mt-3 border-t border-slate-700 pt-3 text-sm font-medium text-cyan-400";
 
