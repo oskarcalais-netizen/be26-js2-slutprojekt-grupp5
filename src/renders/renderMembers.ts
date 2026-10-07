@@ -26,29 +26,17 @@ export const renderMembers = (members) => {
     "mb-2 text-sm text-slate-400";
 
         const memberTasksTitle  = document.createElement("p") as HTMLParagraphElement;
-       memberTasksTitle.textContent = "Ongoing tasks:";
+       memberTasksTitle.textContent = `Ongoing tasks: ${member.ongoingTasks.length} `;
 memberTasksTitle.className =
     "mt-3 border-t border-slate-700 pt-3 text-sm font-medium text-cyan-400";
 
-    const memberTasksList = document.createElement("ul");
-
-memberTasksList.className =
-    "mt-2 space-y-1 text-sm text-slate-300";
-
-    member.ongoingTasks?.forEach((task) => {
-    const taskItem = document.createElement("li");
-
-    taskItem.textContent = task;
-
-    memberTasksList.append(taskItem);
-});
-
+    
         memberListItem.append(
             memberName,
             memberCategory,
             memberProject,
             memberTasksTitle,
-    memberTasksList
+   
         );
 
         
