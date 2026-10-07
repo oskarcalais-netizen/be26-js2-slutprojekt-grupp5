@@ -126,12 +126,4 @@ button {
   padding: 0;
 }
 
-.formBox {
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.formBox button:disabled {
-  opacity: 0.5;
-}
 /* --------------------------------------------- */
