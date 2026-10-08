@@ -3,14 +3,26 @@
 import "./buttons/newMember.ts";
 import "./buttons/newProject.ts";
 
+import { createElement, icons } from "lucide";
+
 import { onValue, ref } from "firebase/database";
 
 import { db } from "./firebaseconfig.ts";
+
 import { renderProjects } from "./renders/renderProjects.ts";
 import { renderMembers } from "./renders/renderMembers.ts";
 import { renderDetailedProject } from "./renders/renderDetailedProject.ts"
+import {renderScrumBoard } from "./renders/renderScrumBoard.ts"
 
-import { createElement, icons } from "lucide";
+import { Project } from "./classes/Project.ts";
+import { Member } from "./classes/Member.ts";
+import { Task } from "./classes/Task.ts";
+
+import type {
+    Category,
+    Priority,
+    TaskStatus
+} from "./types/types.ts";
 
 
 const overviewView =
@@ -23,22 +35,37 @@ const backToOverviewBtn =
     document.getElementById("backToOverviewBtn") as HTMLButtonElement;
 
 
-let projects = {};
-let members = {};
-let tasks = {};
+let projects: Record<string, Project> = {};
+let members: Record<string, Member> = {};
+let tasks: Record<string, Task> = {};
 
-//Sätta inkoner med Lucide för knapparna för ny medlem och projekt
-const newProjectButton = document.getElementById("newprojectbtn");
+let activeProjectId:string | null = null;
 
-const plusIconProject = createElement(icons.Plus);
+// BUTTON ICONS
 
-newProjectButton?.prepend(plusIconProject);
+const newProjectButton =
+    document.getElementById("newprojectbtn");
 
-const newMemberButton = document.getElementById("newmemberbtn");
+if (newProjectButton) {
+    const plusIconProject =
+        createElement(icons.Plus);
 
-const plusIconMember = createElement(icons.Plus);
+    newProjectButton.prepend(
+        plusIconProject
+    );
+}
 
-newMemberButton?.prepend(plusIconMember);
+const newMemberButton =
+    document.getElementById("newmemberbtn");
+
+if (newMemberButton) {
+    const plusIconMember =
+        createElement(icons.Plus);
+
+    newMemberButton.prepend(
+        plusIconMember
+    );
+}
 
 
 //Firebase
@@ -47,7 +74,40 @@ const membersRef = ref(db, "members");
 const tasksRef = ref(db, "tasks");
 
 
-//Öppna projekt
+
+const createTaskFromFirebase = (
+    id: string,
+    data: any
+): Task => {
+    const task =
+        new Task(
+            id,
+            data.title ?? "",
+            data.description ?? "",
+            data.category as Category,
+            data.priority as Priority,
+            data.deadline ?? "",
+            data.projectId ?? data.projektId ?? ""
+        );
+
+    task.created =
+        data.created ??
+        new Date().toISOString();
+
+    task.status =
+        (data.status ?? "new") as TaskStatus;
+
+    task.assignedTo =
+        data.assignedTo;
+
+    task.completedAt =
+        data.completedAt;
+
+    return task;
+};
+
+
+// OPEN PROJECT
 
 function openProject(projectId: string) {
     
@@ -62,14 +122,48 @@ function openProject(projectId: string) {
     projectView?.classList.remove("hidden");
     
     renderDetailedProject(
+    project,
+    members,
+    tasks
+);
+}
+
+// RENDER ACTIVE PROJECT
+
+function renderProject() {
+    if (!activeProjectId) {
+        return;
+    }
+
+    const project =
+        projects[activeProjectId];
+
+    if (!project) {
+        return;
+    }
+
+    renderDetailedProject(
+        project,
+        members,
+        tasks
+    );
+
+    renderScrumBoard(
         project,
         members,
         tasks
     );
 }
 
-//Tillbaka till Overview
+
+// BACK TO OVERVIEW
+
+
+
 backToOverviewBtn.addEventListener("click", () => {
+
+    activeProjectId = null;
+
     
     projectView.classList.add("hidden");
     overviewView.classList.remove("hidden");
@@ -77,21 +171,80 @@ backToOverviewBtn.addEventListener("click", () => {
 });
 
 
-//Firebase projects
+
+
+// FIREBASE - PROJECTS
 onValue(projectsRef, snapshot => {
-     projects = snapshot.val() ?? {};
+
+     const data = snapshot.val() ?? {};
     
+       projects = Object.fromEntries(
+        Object.entries(data).map(([id, projectData]: [string, any]) => [
+            id,
+            new Project(
+                id,
+                projectData.title,
+                projectData.description,
+                projectData.deadline,
+                projectData.members ?? [],
+                projectData.tasks ?? []
+            )
+        ])
+    );
+
     renderProjects(projects, openProject)
+
+     renderProject();  
 })
 
-//Firebase members
+// FIREBASE - MEMBERS
 onValue(membersRef, snapshot => {
-     members = snapshot.val() ?? {};
-    renderMembers(members)
+
+     const data = snapshot.val() ?? {};
+
+       members = Object.fromEntries(
+        Object.entries(data).map(([id, memberData]: [string, any]) => [
+            id,
+            new Member(
+                id,
+                memberData.name,
+                memberData.categories ?? [],
+                memberData.ongoingTasks ?? [],
+                memberData.projects ?? []
+            )
+        ])
+    );
+    
+     renderMembers(members)
+
+   
+renderProject();
+
+            
 });
 
-//Firebase tasks
-onValue(tasksRef, snapshot => {
-    tasks = snapshot.val() ?? {};
-    console.log(tasks);
-})
+// FIREBASE - TASKS
+onValue(
+    tasksRef,
+    (snapshot) => {
+        const data =
+            snapshot.val() ?? {};
+
+        tasks =
+            Object.fromEntries(
+                Object.entries(data).map(
+                    ([id, taskData]) => [
+                        id,
+                        createTaskFromFirebase(
+                            id,
+                            taskData
+                        )
+                    ]
+                )
+            );
+
+        console.log(tasks);
+
+        renderProject();
+    }
+);

@@ -1,34 +1,34 @@
 export class Project {
   id: string;
-  name: string;
+  title: string;
   description: string;
   deadline: string;
-  memberIds: string[];
-  taskIds: string[];
+  members: string[];
+  tasks: string[];
 
   constructor(
     id: string,
-    name: string,
+    title: string,
     description: string,
     deadline: string,
-    memberIds: string[],
+    members: string[],
+     tasks: string[] = []
   ) {
     this.id = id;
-    this.name = name;
+    this.title = title;
     this.description = description;
     this.deadline = deadline;
-    this.memberIds = memberIds;
-    this.taskIds = [];
+    this.members = members;
+    this.tasks = tasks;
   }
 
   getData() {
     return {
-      id: this.id,
-      name: this.name,
+      title: this.title,
       description: this.description,
       deadline: this.deadline,
-      memberIds: this.memberIds,
-      taskIds: this.taskIds,
+      members: this.members,
+      tasks: this.tasks,
     };
   }
 }
