@@ -1,5 +1,10 @@
 import { categories } from "../types/types";
 
+import { push, ref, set } from "firebase/database";
+import { db } from "../firebaseconfig";
+
+let memberIsSaving = false;
+
 const newMemberBtn = document.querySelector(
   "#newmemberbtn",
 ) as HTMLButtonElement;
@@ -10,6 +15,10 @@ const memberContainer = document.querySelector(
 
 // Creates the member box.
 function openMemberBox() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
   memberContainer.innerHTML = `
     <div class="formOverlay">
       <div class="formBox">
@@ -67,6 +76,10 @@ function openMemberBox() {
 
 // Closes the member box.
 function closeMemberBox() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
   memberContainer.innerHTML = "";
 }
 
@@ -81,7 +94,60 @@ memberContainer.addEventListener("click", (event) => {
   }
 });
 
+async function saveMember(name: string, category: string) {
+  const message = document.querySelector(
+    "#memberMessage",
+  ) as HTMLParagraphElement;
+
+  const addMemberBtn = document.querySelector(
+    "#addMemberBtn",
+  ) as HTMLButtonElement;
+
+  memberIsSaving = true;
+  addMemberBtn.disabled = true;
+
+  message.textContent = "Saving member...";
+
+  try {
+    const membersRef = ref(db, "members");
+    const newMemberRef = push(membersRef);
+    const memberId = newMemberRef.key;
+
+    if (memberId === null) {
+      message.textContent = "Could not create the member. Try again.";
+
+      memberIsSaving = false;
+      addMemberBtn.disabled = false;
+
+      return;
+    }
+
+    const memberData = {
+      name: name,
+      categories: [category],
+      ongoingTasks: [],
+      projects: [],
+    };
+
+    await set(newMemberRef, memberData);
+
+    setTimeout(() => {
+      memberIsSaving = false;
+      closeMemberBox();
+    }, 2000);
+  } catch {
+    message.textContent = "The member could not be saved. Try again.";
+
+    memberIsSaving = false;
+    addMemberBtn.disabled = false;
+  }
+}
+
 function checkMember() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
   const nameInput = document.querySelector("#memberName") as HTMLInputElement;
 
   const categoryInput = document.querySelector(
@@ -108,4 +174,6 @@ function checkMember() {
   }
 
   message.textContent = "The information is ready to save.";
+
+  saveMember(name, category);
 }
