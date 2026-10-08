@@ -1,8 +1,10 @@
+import type { Project } from "../classes/Project.ts";
 import {getDeadlineInfo} from "../utils/deadlines.ts"
 
 const projectsContainer = document.getElementById("projectList") as HTMLDivElement;
 
-export const renderProjects = (projects, onProjectClick) => {
+
+export const renderProjects = (projects: Record<string, Project>, onProjectClick: (projectId: string) => void) => {
     projectsContainer.innerHTML = "";
 
     
@@ -29,7 +31,7 @@ export const renderProjects = (projects, onProjectClick) => {
         projectMembersEl.className =
     "mb-2 text-sm text-slate-300";
        
-    //Eventuell tas bort från översikten och läggas i projektvy/detaljsidan istället
+    
         const projectTasksEl = document.createElement("p") as HTMLParagraphElement;
         projectTasksEl.textContent = `Tasks: ${project.tasks.length}`;
         projectTasksEl.className =

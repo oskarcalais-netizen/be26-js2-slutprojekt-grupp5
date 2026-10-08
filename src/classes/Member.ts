@@ -2,24 +2,29 @@ export class Member {
   id: string;
   name: string;
   categories: string[];
-  ongoingTaskCount: number;
-  projectIds: string[];
+  ongoingTasks: string[];
+  projects: string[];
 
-  constructor(id: string, name: string, categories: string[]) {
+  constructor(
+    id: string,
+    name: string,
+    categories: string[],
+    ongoingTasks: string[] = [],
+    projects: string[] = []
+  ) {
     this.id = id;
     this.name = name;
     this.categories = categories;
-    this.ongoingTaskCount = 0;
-    this.projectIds = [];
+    this.ongoingTasks = ongoingTasks;
+    this.projects = projects;
   }
 
   getData() {
     return {
-      id: this.id,
       name: this.name,
       categories: this.categories,
-      ongoingTaskCount: this.ongoingTaskCount,
-      projectIds: this.projectIds,
+      ongoingTasks: this.ongoingTasks,
+      projects: this.projects,
     };
   }
 }

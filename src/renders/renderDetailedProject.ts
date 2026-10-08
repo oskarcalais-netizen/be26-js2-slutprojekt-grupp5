@@ -1,18 +1,20 @@
+import type { Member } from "../classes/Member";
+import type { Project } from "../classes/Project";
+import type { Task } from "../classes/Task";
 
-const projectDetails =
-    document.getElementById("projectDetails") as HTMLDivElement;
+import { renderNewTask } from "./scrumboard/renderNewTasks.ts";
 
-const projectMembers =
-    document.getElementById("projectMembers") as HTMLDivElement;
+const projectDetails = document.getElementById("projectDetails") as HTMLDivElement;
 
-const projectTasks =
-    document.getElementById("projectTasks") as HTMLDivElement;
+const projectMembers = document.getElementById("projectMembers") as HTMLDivElement;
+
+
 
 
 export const renderDetailedProject = (
-    project,
-    members,
-    tasks
+    project: Project,
+    members: Record<string, Member>,
+    tasks: Record<string, Task>
 ) => {
 
 
@@ -40,10 +42,19 @@ export const renderDetailedProject = (
     projectDescriptionEl.className =
         "mt-3 text-slate-400";
 
+    const projectDeadlineEl = document.createElement("p");
+
+    projectDeadlineEl.textContent =
+        `Deadline: ${project.deadline}`;
+
+    projectDeadlineEl.className =
+        "text-sm text-slate-400";
+
 
     projectDetails.append(
         projectTitleEl,
-        projectDescriptionEl
+        projectDescriptionEl,
+        projectDeadlineEl
     );
 
 
@@ -53,8 +64,7 @@ export const renderDetailedProject = (
 
     project.members.forEach((memberId) => {
 
-        const member =
-            members[memberId];
+        const member = members[memberId];
 
         if (!member) {
             return;
@@ -71,8 +81,7 @@ export const renderDetailedProject = (
         const memberNameEl =
             document.createElement("h4");
 
-        memberNameEl.textContent =
-            member.name;
+        memberNameEl.textContent = member.name;
 
         memberNameEl.className =
             "text-lg font-bold text-slate-100";
@@ -88,12 +97,12 @@ export const renderDetailedProject = (
             "mt-2 text-sm text-slate-400";
 
 
-        const activeTasks =
-            Object.values(tasks).filter(
-                (task) =>
-                    task.assignedTo === member.memberId &&
-                    task.status !== "completed"
-            ).length;
+        const activeTasks = member.ongoingTasks.filter(taskTitle =>
+    project.tasks.some(taskId => {
+        const task = tasks[taskId];
+        return task && task.title === taskTitle;
+    })
+).length;
 
 
         const taskCount =
@@ -112,27 +121,55 @@ export const renderDetailedProject = (
             taskCount
         );
 
-        projectMembers.append(
+        projectMembers.appendChild(
             memberCard
         );
 
     });
 
+// TASKS
 
- 
-    // TASKS
-    
-    projectTasks.innerHTML = "";
+const newTasks =
+    document.getElementById("newTasks") as HTMLDivElement;
 
-    project.tasks.forEach((taskId) => {
+const inProgressTasks =
+    document.getElementById("inProgressTasks") as HTMLDivElement;
 
-        const task =
-            tasks[taskId];
+const inReviewTasks =
+    document.getElementById("inReviewTasks") as HTMLDivElement;
 
-        if (!task) {
-            return;
-        }
+const completedTasks =
+    document.getElementById("completedTasks") as HTMLDivElement;
 
+newTasks.innerHTML = "";
+inProgressTasks.innerHTML = "";
+inReviewTasks.innerHTML = "";
+completedTasks.innerHTML = "";
+
+
+project.tasks.forEach((taskId) => {
+
+    const task = tasks[taskId];
+
+    if (!task) {
+        return;
+    }
+
+
+    if (task.status === "new") {
+
+        const taskCard =
+            renderNewTask(
+                task,
+                project,
+                members
+            );
+
+        newTasks.appendChild(taskCard);
+    }
+
+
+    else if (task.status === "in-progress" ) {
 
         const taskCard =
             document.createElement("article");
@@ -140,36 +177,101 @@ export const renderDetailedProject = (
         taskCard.className =
             "mb-3 rounded-xl border border-slate-700 bg-slate-800 p-5";
 
-
-        const title =
+        const taskTitle =
             document.createElement("h4");
 
-        title.textContent =
+        taskTitle.textContent =
             task.title;
 
-        title.className =
+        taskTitle.className =
             "text-lg font-bold text-slate-100";
 
-
-        const status =
+        const taskStatus =
             document.createElement("p");
 
-        status.textContent =
+        taskStatus.textContent =
             `Status: ${task.status}`;
 
-        status.className =
+        taskStatus.className =
             "mt-2 text-sm text-slate-400";
 
+        taskCard.append(
+            taskTitle,
+            taskStatus
+        );
+
+        inProgressTasks.appendChild(taskCard);
+    }
+    else if (task.status === "in-review" ) {
+
+        const taskCard =
+            document.createElement("article");
+
+        taskCard.className =
+            "mb-3 rounded-xl border border-slate-700 bg-slate-800 p-5";
+
+        const taskTitle =
+            document.createElement("h4");
+
+        taskTitle.textContent =
+            task.title;
+
+        taskTitle.className =
+            "text-lg font-bold text-slate-100";
+
+        const taskStatus =
+            document.createElement("p");
+
+        taskStatus.textContent =
+            `Status: ${task.status}`;
+
+        taskStatus.className =
+            "mt-2 text-sm text-slate-400";
 
         taskCard.append(
-            title,
-            status
+            taskTitle,
+            taskStatus
         );
 
-        projectTasks.append(
-            taskCard
+        inReviewTasks.appendChild(taskCard);
+    }
+
+
+    else if (task.status === "completed") {
+
+        const taskCard =
+            document.createElement("article");
+
+        taskCard.className =
+            "mb-3 rounded-xl border border-slate-700 bg-slate-800 p-5";
+
+        const taskTitle =
+            document.createElement("h4");
+
+        taskTitle.textContent =
+            task.title;
+
+        taskTitle.className =
+            "text-lg font-bold text-slate-100";
+
+        const taskStatus =
+            document.createElement("p");
+
+        taskStatus.textContent =
+            `Status: ${task.status}`;
+
+        taskStatus.className =
+            "mt-2 text-sm text-slate-400";
+
+        taskCard.append(
+            taskTitle,
+            taskStatus
         );
 
-    });
-};
+        completedTasks.appendChild(taskCard);
+    }
+
+});
+ 
+}
 
