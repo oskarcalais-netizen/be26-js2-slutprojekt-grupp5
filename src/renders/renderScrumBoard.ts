@@ -8,9 +8,9 @@ const newTasksContainer = document.getElementById("newTasks") as HTMLDivElement;
 const inProgressTasksContainer = document.getElementById("inProgressTasks") as HTMLDivElement;
 const completedTasksContainer = document.getElementById("completedTasks") as HTMLDivElement;
 
-const newTaskCount = document.getElementById("newTaskCount") as HTMLSpanElement;
-const inProgressTaskCount = document.getElementById("inProgressTaskCount") as HTMLSpanElement;
-const completedTaskCount = document.getElementById("completedTaskCount") as HTMLSpanElement;
+// const newTaskCount = document.getElementById("newTaskCount") as HTMLSpanElement;
+// const inProgressTaskCount = document.getElementById("inProgressTaskCount") as HTMLSpanElement;
+// const completedTaskCount = document.getElementById("completedTaskCount") as HTMLSpanElement;
 
 
 const createSimpleTaskCard = (task: Task) => {
@@ -64,7 +64,7 @@ export const renderScrumBoard = (
     completedTasksContainer.innerHTML = "";
 
     const projectTasks =
-        project.taskIds
+        project.tasks
             .map((taskId) => tasks[taskId])
             .filter(
                 (task): task is Task =>
@@ -86,14 +86,14 @@ export const renderScrumBoard = (
             (task) => task.status === "completed"
         );
 
-    newTaskCount.textContent =
-        String(newTasks.length);
+    // newTaskCount.textContent =
+    //     String(newTasks.length);
 
-    inProgressTaskCount.textContent =
-        String(inProgressTasks.length);
+    // inProgressTaskCount.textContent =
+    //     String(inProgressTasks.length);
 
-    completedTaskCount.textContent =
-        String(completedTasks.length);
+    // completedTaskCount.textContent =
+    //     String(completedTasks.length);
 
     newTasks.forEach((task) => {
         newTasksContainer.appendChild(
