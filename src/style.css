@@ -108,3 +108,19 @@ button {
 }
 
 /* --------------------------------------------- */
+
+/* Styling delete member button */
+.deleteMemberBtn {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #b91c1c;
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteMemberBtn:hover {
+  background-color: #dc2626;
+}
