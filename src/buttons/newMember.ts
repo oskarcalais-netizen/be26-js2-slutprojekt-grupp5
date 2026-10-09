@@ -1,4 +1,10 @@
 import { categories } from "../types/types";
+import { Member } from "../classes/Member";
+
+import { push, ref } from "firebase/database";
+import { db } from "../firebaseconfig";
+
+let memberIsSaving = false;
 
 const newMemberBtn = document.querySelector(
   "#newmemberbtn",
@@ -10,6 +16,10 @@ const memberContainer = document.querySelector(
 
 // Creates the member box.
 function openMemberBox() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
   memberContainer.innerHTML = `
     <div class="formOverlay">
       <div class="formBox">
@@ -22,11 +32,9 @@ function openMemberBox() {
           placeholder="Enter the member's name"
         />
 
-        <label for="memberCategory">Category</label>
+        <h3>Categories</h3>
 
-        <select id="memberCategory">
-          <option value="" disabled selected>Choose a category</option>
-        </select>
+        <div id="memberCategories"></div>
 
         <p id="memberMessage"></p>
 
@@ -37,18 +45,18 @@ function openMemberBox() {
     </div>
   `;
 
-  const memberCategory = document.querySelector(
-    "#memberCategory",
-  ) as HTMLSelectElement;
+  const categoryContainer = document.querySelector(
+    "#memberCategories",
+  ) as HTMLDivElement;
 
   // Loopen tar en kategori från types.ts i taget och skapar ett alternativ
   for (let i = 0; i < categories.length; i++) {
-    const option = document.createElement("option");
-
-    option.value = categories[i];
-    option.textContent = categories[i];
-
-    memberCategory.append(option);
+    categoryContainer.innerHTML += `
+    <label class= "projectMemberRow">
+      <input type="checkbox" class="memberCategoryCheckbox" value="${categories[i]}">
+      ${categories[i]}
+    </label>
+  `;
   }
 
   // The button now exists because the HTML has been added.
@@ -67,6 +75,10 @@ function openMemberBox() {
 
 // Closes the member box.
 function closeMemberBox() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
   memberContainer.innerHTML = "";
 }
 
@@ -81,19 +93,74 @@ memberContainer.addEventListener("click", (event) => {
   }
 });
 
-function checkMember() {
-  const nameInput = document.querySelector("#memberName") as HTMLInputElement;
+async function saveMember(name: string, selectedCategories: string[]) {
+  const message = document.querySelector(
+    "#memberMessage",
+  ) as HTMLParagraphElement;
 
-  const categoryInput = document.querySelector(
-    "#memberCategory",
-  ) as HTMLSelectElement;
+  const addMemberBtn = document.querySelector(
+    "#addMemberBtn",
+  ) as HTMLButtonElement;
+
+  memberIsSaving = true;
+  addMemberBtn.disabled = true;
+
+  message.textContent = "Saving member...";
+
+  try {
+    const membersRef = ref(db, "members");
+    const newMemberRef = push(membersRef);
+    const memberId = newMemberRef.key;
+
+    if (memberId === null) {
+      message.textContent = "Could not create the member. Try again.";
+
+      memberIsSaving = false;
+      addMemberBtn.disabled = false;
+
+      return;
+    }
+
+    const member = new Member(memberId, name, selectedCategories);
+
+    await member.save();
+
+    setTimeout(() => {
+      memberIsSaving = false;
+      closeMemberBox();
+    }, 1000);
+  } catch {
+    message.textContent = "The member could not be saved. Try again.";
+
+    memberIsSaving = false;
+    addMemberBtn.disabled = false;
+  }
+}
+
+function checkMember() {
+  if (memberIsSaving === true) {
+    return;
+  }
+
+  const nameInput = document.querySelector("#memberName") as HTMLInputElement;
 
   const message = document.querySelector(
     "#memberMessage",
   ) as HTMLParagraphElement;
 
   const name = nameInput.value.trim();
-  const category = categoryInput.value;
+
+  const checkboxes = document.querySelectorAll(".memberCategoryCheckbox");
+
+  const selectedCategories: string[] = [];
+  // Kontroll som visar om kryssrutan är ikryssad
+  for (let i = 0; i < checkboxes.length; i++) {
+    const checkbox = checkboxes[i] as HTMLInputElement;
+
+    if (checkbox.checked) {
+      selectedCategories.push(checkbox.value);
+    }
+  }
 
   message.textContent = "";
 
@@ -102,10 +169,12 @@ function checkMember() {
     return;
   }
 
-  if (category === "") {
-    message.textContent = "Choose a category.";
+  if (selectedCategories.length === 0) {
+    message.textContent = "Choose at least one category.";
     return;
   }
 
   message.textContent = "The information is ready to save.";
+
+  saveMember(name, selectedCategories);
 }
