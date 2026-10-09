@@ -1,3 +1,6 @@
+import { ref, set, remove } from "firebase/database";
+import { db } from "../firebaseconfig";
+
 export class Member {
   id: string;
   name: string;
@@ -10,7 +13,7 @@ export class Member {
     name: string,
     categories: string[],
     ongoingTasks: string[] = [],
-    projects: string[] = []
+    projects: string[] = [],
   ) {
     this.id = id;
     this.name = name;
@@ -26,5 +29,18 @@ export class Member {
       ongoingTasks: this.ongoingTasks,
       projects: this.projects,
     };
+  }
+
+  async save() {
+    const memberRef = ref(db, "members/" + this.id);
+    const memberData = this.getData();
+
+    await set(memberRef, memberData);
+  }
+
+  async delete() {
+    const memberRef = ref(db, "members/" + this.id);
+
+    await remove(memberRef);
   }
 }

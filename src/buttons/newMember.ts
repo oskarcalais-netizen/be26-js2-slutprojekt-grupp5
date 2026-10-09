@@ -1,6 +1,7 @@
 import { categories } from "../types/types";
+import { Member } from "../classes/Member";
 
-import { push, ref, set } from "firebase/database";
+import { push, ref } from "firebase/database";
 import { db } from "../firebaseconfig";
 
 let memberIsSaving = false;
@@ -120,19 +121,14 @@ async function saveMember(name: string, selectedCategories: string[]) {
       return;
     }
 
-    const memberData = {
-      name: name,
-      categories: selectedCategories,
-      ongoingTasks: [],
-      projects: [],
-    };
+    const member = new Member(memberId, name, selectedCategories);
 
-    await set(newMemberRef, memberData);
+    await member.save();
 
     setTimeout(() => {
       memberIsSaving = false;
       closeMemberBox();
-    }, 2000);
+    }, 1000);
   } catch {
     message.textContent = "The member could not be saved. Try again.";
 
