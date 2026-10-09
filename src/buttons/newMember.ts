@@ -31,11 +31,9 @@ function openMemberBox() {
           placeholder="Enter the member's name"
         />
 
-        <label for="memberCategory">Category</label>
+        <h3>Categories</h3>
 
-        <select id="memberCategory">
-          <option value="" disabled selected>Choose a category</option>
-        </select>
+        <div id="memberCategories"></div>
 
         <p id="memberMessage"></p>
 
@@ -46,18 +44,18 @@ function openMemberBox() {
     </div>
   `;
 
-  const memberCategory = document.querySelector(
-    "#memberCategory",
-  ) as HTMLSelectElement;
+  const categoryContainer = document.querySelector(
+    "#memberCategories",
+  ) as HTMLDivElement;
 
   // Loopen tar en kategori från types.ts i taget och skapar ett alternativ
   for (let i = 0; i < categories.length; i++) {
-    const option = document.createElement("option");
-
-    option.value = categories[i];
-    option.textContent = categories[i];
-
-    memberCategory.append(option);
+    categoryContainer.innerHTML += `
+    <label class= "projectMemberRow">
+      <input type="checkbox" class="memberCategoryCheckbox" value="${categories[i]}">
+      ${categories[i]}
+    </label>
+  `;
   }
 
   // The button now exists because the HTML has been added.
@@ -94,7 +92,7 @@ memberContainer.addEventListener("click", (event) => {
   }
 });
 
-async function saveMember(name: string, category: string) {
+async function saveMember(name: string, selectedCategories: string[]) {
   const message = document.querySelector(
     "#memberMessage",
   ) as HTMLParagraphElement;
@@ -124,7 +122,7 @@ async function saveMember(name: string, category: string) {
 
     const memberData = {
       name: name,
-      categories: [category],
+      categories: selectedCategories,
       ongoingTasks: [],
       projects: [],
     };
@@ -150,16 +148,23 @@ function checkMember() {
 
   const nameInput = document.querySelector("#memberName") as HTMLInputElement;
 
-  const categoryInput = document.querySelector(
-    "#memberCategory",
-  ) as HTMLSelectElement;
-
   const message = document.querySelector(
     "#memberMessage",
   ) as HTMLParagraphElement;
 
   const name = nameInput.value.trim();
-  const category = categoryInput.value;
+
+  const checkboxes = document.querySelectorAll(".memberCategoryCheckbox");
+
+  const selectedCategories: string[] = [];
+  // Kontroll som visar om kryssrutan är ikryssad
+  for (let i = 0; i < checkboxes.length; i++) {
+    const checkbox = checkboxes[i] as HTMLInputElement;
+
+    if (checkbox.checked) {
+      selectedCategories.push(checkbox.value);
+    }
+  }
 
   message.textContent = "";
 
@@ -168,12 +173,12 @@ function checkMember() {
     return;
   }
 
-  if (category === "") {
-    message.textContent = "Choose a category.";
+  if (selectedCategories.length === 0) {
+    message.textContent = "Choose at least one category.";
     return;
   }
 
   message.textContent = "The information is ready to save.";
 
-  saveMember(name, category);
+  saveMember(name, selectedCategories);
 }
