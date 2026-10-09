@@ -1,3 +1,5 @@
+import { formatProjectTitle } from '../utils/capitalizeFirstLetter';
+
 export class Project {
   id: string;
   title: string;
@@ -15,7 +17,7 @@ export class Project {
      tasks: string[] = []
   ) {
     this.id = id;
-    this.title = title;
+    this.title = formatProjectTitle(title);
     this.description = description;
     this.deadline = deadline;
     this.members = members;
