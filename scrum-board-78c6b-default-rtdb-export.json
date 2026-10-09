@@ -1,0 +1,197 @@
+{
+  "members": {
+    "member-1": {
+      "categories": [
+        "Backend Engineer",
+        "Frontend Developer",
+        "Database manager"
+      ],
+      "name": "Diana Paragina",
+      "ongoingTasks": [
+        "Build Responsive Navigation",
+        "Implement Authentication API",
+        "Create Mobile Dashboard",
+        "Design Firestore Structure"
+      ],
+      "projects": [
+        "New Website",
+        "Mobile App",
+        "Design System"
+      ]
+    },
+    "member-2": {
+      "categories": [
+        "Git admin",
+        "Frontend Developer",
+        "QA manager"
+      ],
+      "name": "Oskar Calais",
+      "ongoingTasks": [
+        "Build Responsive Navigation",
+        "Manage User Permissions",
+        "Run Application Tests"
+      ],
+      "projects": [
+        "New Website",
+        "Admin Portal"
+      ]
+    },
+    "member-3": {
+      "categories": [
+        "UI/UX Designer",
+        "Backend Engineer",
+        "QA manager"
+      ],
+      "name": "Zana Ibrahim",
+      "ongoingTasks": [
+        "Run Application Tests"
+      ],
+      "projects": [
+        "Mobile App",
+        "Admin Portal",
+        "Design System"
+      ]
+    }
+  },
+  "projects": {
+    "project-1": {
+      "deadline": "2026-11-15",
+      "description": "Develop a new modern website for the company.",
+      "members": [
+        "member-1",
+        "member-2"
+      ],
+      "tasks": [
+        "task-1",
+        "task-2"
+      ],
+      "title": "New Website"
+    },
+    "project-2": {
+      "deadline": "2026-12-01",
+      "description": "Develop a mobile app for managing customer bookings.",
+      "members": [
+        "member-1",
+        "member-3"
+      ],
+      "tasks": [
+        "task-3",
+        "task-4"
+      ],
+      "title": "Mobile App"
+    },
+    "project-3": {
+      "deadline": "2026-11-30",
+      "description": "Build an internal portal for administration and analytics.",
+      "members": [
+        "member-2",
+        "member-3"
+      ],
+      "tasks": [
+        "task-5",
+        "task-6"
+      ],
+      "title": "Admin Portal"
+    },
+    "project-4": {
+      "deadline": "2027-01-15",
+      "description": "Create a shared design system for digital products.",
+      "members": [
+        "member-1",
+        "member-3"
+      ],
+      "tasks": [
+        "task-7",
+        "task-8"
+      ],
+      "title": "Design System"
+    }
+  },
+  "tasks": {
+    "task-1": {
+      "assignedTo": "member-1",
+      "category": "Frontend Developer",
+      "created": "2026-10-05",
+      "deadline": "2026-10-20",
+      "description": "Implement a responsive navigation menu for desktop and mobile.",
+      "priority": "high",
+      "projectId": "project-1",
+      "status": "in-progress",
+      "title": "Build Responsive Navigation"
+    },
+    "task-2": {
+      "category": "Backend Engineer",
+      "created": "2026-10-04",
+      "deadline": "2026-10-22",
+      "description": "Create backend endpoints for user login, registration and authentication.",
+      "priority": "critical",
+      "projectId": "project-1",
+      "status": "in-review",
+      "title": "Implement Authentication API"
+    },
+    "task-3": {
+      "assignedTo": "member-3",
+      "category": "UI/UX Designer",
+      "created": "2026-09-28",
+      "deadline": "2026-10-15",
+      "description": "Create a clear user flow for creating and managing bookings.",
+      "priority": "moderate",
+      "projectId": "project-2",
+      "status": "completed",
+      "title": "Design User Flow"
+    },
+    "task-4": {
+      "category": "Frontend Developer",
+      "created": "2026-10-05",
+      "deadline": "2026-11-01",
+      "description": "Build the main dashboard for mobile users.",
+      "priority": "low",
+      "projectId": "project-2",
+      "status": "new",
+      "title": "Create Mobile Dashboard"
+    },
+    "task-5": {
+      "category": "Git admin",
+      "created": "2026-10-05",
+      "deadline": "2026-10-25",
+      "description": "Define and configure user roles and permissions in the application.",
+      "priority": "critical",
+      "projectId": "project-3",
+      "status": "new",
+      "title": "Manage User Permissions"
+    },
+    "task-6": {
+      "assignedTo": "member-3",
+      "category": "QA manager",
+      "created": "2026-10-03",
+      "deadline": "2026-10-23",
+      "description": "Perform functional testing of the main administration features.",
+      "priority": "high",
+      "projectId": "project-3",
+      "status": "in-progress",
+      "title": "Run Application Tests"
+    },
+    "task-7": {
+      "assignedTo": "member-3",
+      "category": "UI/UX Designer",
+      "created": "2026-10-01",
+      "deadline": "2026-10-10",
+      "description": "Define the structure and guidelines for the shared design system.",
+      "priority": "high",
+      "projectId": "project-4",
+      "status": "completed",
+      "title": "Plan Design System"
+    },
+    "task-8": {
+      "assignedTo": "member-1",
+      "category": "Database manager",
+      "created": "2026-10-05",
+      "deadline": "2026-10-20",
+      "description": "Define the Firestore collections and document structure for the application.",
+      "priority": "high",
+      "projectId": "project-4",
+      "status": "in-progress",
+      "title": "Design Firestore Structure"
+    }
+  }
+}

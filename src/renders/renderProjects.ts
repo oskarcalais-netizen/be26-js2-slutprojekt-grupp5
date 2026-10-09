@@ -1,12 +1,14 @@
+import type { Project } from "../classes/Project.ts";
 import {getDeadlineInfo} from "../utils/deadlines.ts"
 
 const projectsContainer = document.getElementById("projectList") as HTMLDivElement;
 
-export const renderProjects = (projects) => {
+
+export const renderProjects = (projects: Record<string, Project>, onProjectClick: (projectId: string) => void) => {
     projectsContainer.innerHTML = "";
 
     
-    Object.values(projects).forEach((project) => {
+    Object.entries(projects).forEach(([projectId, project]) => {
 
        const deadlineInfo = getDeadlineInfo(project.deadline);
 
@@ -25,13 +27,13 @@ export const renderProjects = (projects) => {
     "mb-5 text-sm leading-6 text-slate-400";
         
         const projectMembersEl = document.createElement("p") as HTMLParagraphElement;
-        projectMembersEl.textContent = `Members: ${project.members.join(", ")}`;
+        projectMembersEl.textContent = `Members: ${project.members.length}`;
         projectMembersEl.className =
     "mb-2 text-sm text-slate-300";
        
-    //Eventuell tas bort från översikten och läggas i projektvy/detaljsidan istället
+    
         const projectTasksEl = document.createElement("p") as HTMLParagraphElement;
-        projectTasksEl.textContent = `Tasks: ${project.tasks.join(", ")}`;
+        projectTasksEl.textContent = `Tasks: ${project.tasks.length}`;
         projectTasksEl.className =
     "mb-2 text-sm text-slate-300";
 
@@ -61,7 +63,13 @@ export const renderProjects = (projects) => {
 }
 
 
-
+projectListContainer.addEventListener(
+    "click",
+    () => {
+        onProjectClick(projectId);
+       
+    }
+);
        
 
 

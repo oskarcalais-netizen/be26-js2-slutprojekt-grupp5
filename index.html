@@ -24,43 +24,209 @@
     </header>
 
     <main class="min-h-screen bg-slate-950 px-6 py-10">
-      <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
 
-      <section id="projectsContainer" class="mb-12">
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
-          <button
-            id="newprojectbtn"
-            type="button"
-            class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
-          >
-            New project
-          </button>
-        </div>
+      <!-- OVERVIEW -->
 
-        <div
-          id="projectList"
-          class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-        ></div>
+      <section id="overviewView">
+
+        <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
+  
+        <!-- PROJECTS -->
+        <section id="projectsContainer" class="mb-12">
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
+            <button id="newprojectbtn" type="button"
+             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
+             shadow-lg shadow-indigo-600/20
+             transition hover:bg-indigo-300 hover:scale-105"
+    
+            >New project</button>
+  
+  
+          </div>
+  
+          <div id="projectList" class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
+          </div>
+        </section>
+
+  
+        <!-- MEMBERS -->
+
+        <section id="membersContainer">
+           <div class="mb-5 flex items-center justify-between">
+  
+             <h3 class="text-2xl font-bold text-slate-100">Members</h3>
+             <button id="newmemberbtn" type="button"
+             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
+             shadow-lg shadow-indigo-600/20
+             transition hover:bg-indigo-300 hover:scale-105"
+               >New member</button>
+  
+           </div>
+  
+          <ul id="memberList"
+          class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
+           
+          </ul>
+        </section>
+
       </section>
 
-      <section id="membersContainer">
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-2xl font-bold text-slate-100">Members</h3>
-          <button
-            id="newmemberbtn"
-            type="button"
-            class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
-          >
-            New member
-          </button>
-        </div>
+       <!-- PROJECT VIEW -->
+      
+      <section id="projectView" class="hidden">
 
-        <ul
-          id="memberList"
-          class="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-        ></ul>
-      </section>
+  <button
+    id="backToOverviewBtn"
+    type="button"
+    class="mb-8 text-indigo-400 hover:text-indigo-300"
+  >
+    ← Back to overview
+  </button>
+
+  <!-- PROJECT DETAILS -->
+
+  <div id="projectDetails"></div>
+
+  <section class="mt-10">
+    <h3 class="mb-5 text-2xl font-bold text-slate-100">
+      Members
+    </h3>
+
+    <!-- PROJECT MEMBERS -->
+
+    <div
+      id="projectMembers"
+      class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
+    ></div>
+  </section>
+
+
+   <!-- SCRUM BOARD -->
+
+  <section class="mt-10">
+
+    <h3 class="mb-5 text-2xl font-bold text-slate-100">
+      Tasks
+    </h3>
+
+    <div id="projectTasks" class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+
+       <!-- NEW -->
+
+                <section>
+
+                    <div
+                        class="mb-4 flex items-center justify-between"
+                    >
+
+                        <h4
+                            class="text-xl font-bold text-slate-100"
+                        >
+                            New
+                        </h4>
+
+
+                       
+
+                    </div>
+
+
+                    <div
+                        id="newTasks"
+                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+                    ></div>
+
+                </section>
+
+
+                <!-- IN PROGRESS -->
+
+                <section>
+
+                    <div
+                        class="mb-4 flex items-center justify-between"
+                    >
+
+                        <h4
+                            class="text-xl font-bold text-slate-100"
+                        >
+                            In Progress
+                        </h4>
+
+
+                       
+
+                    </div>
+
+
+                    <div
+                        id="inProgressTasks"
+                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+                    ></div>
+
+                </section>
+
+                <!-- IN REVIEW -->
+
+                <section>
+
+                    <div
+                        class="mb-4 flex items-center justify-between"
+                    >
+
+                        <h4
+                            class="text-xl font-bold text-slate-100"
+                        >
+                            In Review
+                        </h4>
+
+
+                       
+
+                    </div>
+
+
+                    <div
+                        id="inReviewTasks"
+                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+                    ></div>
+
+                </section>
+
+
+                <!-- COMPLETED -->
+
+                <section>
+
+                    <div
+                        class="mb-4 flex items-center justify-between"
+                    >
+
+                        <h4
+                            class="text-xl font-bold text-slate-100"
+                        >
+                            Completed
+                        </h4>
+
+
+                       
+
+                    </div>
+
+
+                    <div
+                        id="completedTasks"
+                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+                    ></div>
+
+                </section>
+
+
+    </div>
+  </section>
+
+</section>
     </main>
 
     <div id="memberContainer"></div>
