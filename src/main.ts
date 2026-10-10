@@ -38,7 +38,7 @@ function getProjectFilterState(): ProjectFilterOptions {
   const sortOrderSelect = document.getElementById('projectSortOrderSelect') as HTMLSelectElement;
 
   return {
-    name: searchInput?.value || undefined,
+    title: searchInput?.value || undefined,
     sortBy: (sortBySelect?.value as ProjectFilterOptions['sortBy']) || 'createdAt',
     sortOrder: (sortOrderSelect?.value as ProjectFilterOptions['sortOrder']) || 'asc'
   };

@@ -1,12 +1,12 @@
 export interface ProjectFilterOptions {
-  name?: string;
-  sortBy?: 'name' | 'deadline' | 'createdAt';
+  title?: string;
+  sortBy?: 'title' | 'deadline' | 'createdAt';
   sortOrder?: 'asc' | 'desc';
 }
 
 export interface ProjectItem {
   id: string;
-  name: string;
+  title: string;
   deadline: string | Date;
   createdAt: string | Date; // <-- Placeholder
   [key: string]: any;
@@ -16,10 +16,10 @@ export function filterAndSortProjects(
   projects: ProjectItem[],
   options: ProjectFilterOptions
 ): ProjectItem[] {
-  const { name, sortBy = 'createdAt', sortOrder = 'asc' } = options;
+  const { title, sortBy = 'createdAt', sortOrder = 'asc' } = options;
 
   const filteredProjects = projects.filter((project) => {
-    if (name && !project.name.toLowerCase().includes(name.toLowerCase())) {
+    if (title && !project.title.toLowerCase().includes(title.toLowerCase())) {
       return false;
     }
     return true;
@@ -29,8 +29,8 @@ export function filterAndSortProjects(
     let comparison = 0;
 
     switch (sortBy) {
-      case 'name':
-        comparison = a.name.localeCompare(b.name);
+      case 'title':
+        comparison = a.title.localeCompare(b.title);
         break;
       case 'deadline':
         comparison = new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
