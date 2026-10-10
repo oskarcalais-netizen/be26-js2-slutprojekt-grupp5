@@ -31,22 +31,44 @@
 
         <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
   
-        <!-- PROJECTS -->
         <section id="projectsContainer" class="mb-12">
+          <!-- HEADER ROW -->
           <div class="mb-5 flex items-center justify-between">
             <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
             <button id="newprojectbtn" type="button"
              class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
              shadow-lg shadow-indigo-600/20
              transition hover:bg-indigo-300 hover:scale-105"
-    
             >New project</button>
-  
-  
           </div>
-  
-          <div id="projectList" class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
+
+          <!-- FILTER BAR ROW -->
+          <div class="mb-6 flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              id="projectSearchInput"
+              placeholder="Search project..."
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <select
+              id="projectSortBySelect"
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="createdAt">Date Created</option>
+              <option value="title">Project Title</option>
+              <option value="deadline">Deadline</option>
+            </select>
+            <select
+              id="projectSortOrderSelect"
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
           </div>
+
+          <!-- PROJECTS GRID -->
+          <div id="projectList" class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"></div>
         </section>
 
   
@@ -106,11 +128,52 @@
 
   <section class="mt-10">
 
-    <h3 class="mb-5 text-2xl font-bold text-slate-100">
-      Tasks
-    </h3>
+    <div class="mb-5 flex items-center justify-between">
+      <h3 class="text-2xl font-bold text-slate-100">Tasks</h3>
+    </div>
+
+    <!-- TASK FILTER BAR -->
+    <div class="mb-6 flex flex-wrap items-center gap-3">
+      <input
+        type="text"
+        id="taskSearchInput"
+        placeholder="Filter by title..."
+        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+     <select
+  id="taskPrioritySelect"
+  class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+>
+      <option value="" class="text-slate-400">Priority...</option>
+      <option value="Low" class="text-slate-100">Low</option>
+      <option value="Moderate" class="text-slate-100">Moderate</option>
+      <option value="High" class="text-slate-100">High</option>
+      <option value="Critical" class="text-slate-100">Critical</option>
+      </select>
+      <select
+        id="taskSortBySelect"
+        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        <option value="createdAt">Date Added</option>
+        <option value="title">Title</option>
+        <option value="priority">Priority</option>
+        <option value="assignedMember">Assigned Member</option>
+        <option value="category">Category</option>
+        <option value="deadline">Deadline</option>
+      </select>
+      <select
+        id="taskSortOrderSelect"
+        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
 
     <div id="projectTasks" class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+      <!-- COLUMNS: New, In Progress, In Review, Completed -->
+    </div>
+  </section>
 
        <!-- NEW -->
 

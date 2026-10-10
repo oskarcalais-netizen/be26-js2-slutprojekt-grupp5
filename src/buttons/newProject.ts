@@ -1,5 +1,6 @@
 import { get, ref } from "firebase/database";
 import { db } from "../firebaseconfig";
+import { formatMemberName , formatProjectTitle} from '../utils/capitalizeFirstLetter';
 
 const newProjectBtn = document.querySelector(
   "#newprojectbtn",
@@ -16,11 +17,11 @@ function openProjectBox() {
       <div class="formBox">
         <h2>New project</h2>
 
-        <label for="projectName">Name</label>
+        <label for="projectTitle">Title</label>
         <input
-          id="projectName"
+          id="projectTitle"
           type="text"
-          placeholder="Enter the project name"
+          placeholder="Enter the project title"
         />
 
         <label for="projectDescription">Description</label>
@@ -114,7 +115,7 @@ async function loadProjectMembers() {
       checkbox.value = memberId;
 
       const memberName = document.createElement("span");
-      memberName.textContent = member.name;
+      memberName.textContent = formatMemberName(member.name);
 
       label.append(checkbox);
       label.append(memberName);
@@ -131,7 +132,7 @@ async function loadProjectMembers() {
 }
 
 function checkProject() {
-  const nameInput = document.querySelector("#projectName") as HTMLInputElement;
+  const titleInput = document.querySelector("#projectTitle") as HTMLInputElement;
 
   const descriptionInput = document.querySelector(
     "#projectDescription",
@@ -147,7 +148,7 @@ function checkProject() {
     "#projectMessage",
   ) as HTMLParagraphElement;
 
-  const name = nameInput.value.trim();
+  const title = formatProjectTitle(titleInput.value);
   const description = descriptionInput.value.trim();
   const deadline = deadlineInput.value;
 
@@ -155,8 +156,8 @@ function checkProject() {
 
   message.textContent = "";
 
-  if (name === "") {
-    message.textContent = "Enter a project name.";
+  if (title === "") {
+    message.textContent = "Enter a project title.";
     return;
   }
 
