@@ -12,32 +12,32 @@ export const renderProjects = (projects: Record<string, Project>, onProjectClick
 
        const deadlineInfo = getDeadlineInfo(project.deadline);
 
-        const projectListContainer = document.createElement("article") as HTMLElement;
+        const projectListContainer = document.createElement("article");
        projectListContainer.className =
     "rounded-xl border border-slate-700 bg-slate-800 p-6 shadow-lg transition hover:-translate-y-1 hover:border-indigo-500 hover:shadow-indigo-500/10";
 
-        const projectTitleEl = document.createElement("h4") as HTMLHeadElement;
+        const projectTitleEl = document.createElement("h4");
         projectTitleEl.textContent = project.title;
         projectTitleEl.className =
     "mb-2 text-xl font-bold text-slate-100";
 
-        const projectDescriptionEl = document.createElement("p") as HTMLParagraphElement;
+        const projectDescriptionEl = document.createElement("p");
         projectDescriptionEl.textContent = project.description;
         projectDescriptionEl.className =
     "mb-5 text-sm leading-6 text-slate-400";
         
-        const projectMembersEl = document.createElement("p") as HTMLParagraphElement;
+        const projectMembersEl = document.createElement("p");
         projectMembersEl.textContent = `Members: ${project.members.length}`;
         projectMembersEl.className =
     "mb-2 text-sm text-slate-300";
        
     
-        const projectTasksEl = document.createElement("p") as HTMLParagraphElement;
+        const projectTasksEl = document.createElement("p");
         projectTasksEl.textContent = `Tasks: ${project.tasks.length}`;
         projectTasksEl.className =
     "mb-2 text-sm text-slate-300";
 
-        const projectDeadlineEl = document.createElement("p") as HTMLParagraphElement;
+        const projectDeadlineEl = document.createElement("p");
         projectDeadlineEl.textContent = `Deadline: ${deadlineInfo.formattedDeadline} · ${deadlineInfo.deadlineText}`;
        
         switch (deadlineInfo.deadlineStatus) {
