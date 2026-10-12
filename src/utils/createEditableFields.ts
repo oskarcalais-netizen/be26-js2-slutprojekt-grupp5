@@ -1,6 +1,7 @@
 import { ref, update } from "firebase/database";
 import type { Task } from "../classes/Task";
 import { db } from "../firebaseconfig";
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 
 export const createEditableFields = (task: Task) => {
@@ -48,7 +49,7 @@ export const createEditableFields = (task: Task) => {
   priorities.forEach(priority => {
     const option = document.createElement("option");
     option.value = priority;
-    option.textContent = priority;
+    option.textContent = capitalizeFirstLetter(priority);
     option.selected = task.priority === priority;
     prioritySelect.appendChild(option);
   });

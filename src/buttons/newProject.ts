@@ -1,6 +1,6 @@
 import { get, ref } from "firebase/database";
 import { db } from "../firebaseconfig";
-import { formatMemberName , formatProjectTitle} from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 const newProjectBtn = document.querySelector(
   "#newprojectbtn",
@@ -115,7 +115,7 @@ async function loadProjectMembers() {
       checkbox.value = memberId;
 
       const memberName = document.createElement("span");
-      memberName.textContent = formatMemberName(member.name);
+      memberName.textContent = capitalizeFirstLetter(member.name);
 
       label.append(checkbox);
       label.append(memberName);
@@ -148,7 +148,7 @@ function checkProject() {
     "#projectMessage",
   ) as HTMLParagraphElement;
 
-  const title = formatProjectTitle(titleInput.value);
+  const title = capitalizeFirstLetter(titleInput.value);
   const description = descriptionInput.value.trim();
   const deadline = deadlineInput.value;
 
