@@ -1,5 +1,5 @@
 import type { Category, Priority, TaskStatus } from "../types/types";
-import { formatTaskTitle } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 
 export class Task {
@@ -25,7 +25,7 @@ export class Task {
         projectId: string)
         {
           this.id = id; 
-          this.title = formatTaskTitle(title); 
+          this.title = capitalizeFirstLetter(title); 
           this.description = description; 
           this.category = category; 
           this.priority = priority; 

@@ -1,6 +1,6 @@
 import { ref, set, remove } from "firebase/database";
 import { db } from "../firebaseconfig";
-import { formatMemberName } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 export class Member {
   id: string;
@@ -17,7 +17,7 @@ export class Member {
     projects: string[] = [],
   ) {
     this.id = id;
-    this.name = formatMemberName(name);
+    this.name = capitalizeFirstLetter(name);
     this.categories = categories;
     this.ongoingTasks = ongoingTasks;
     this.projects = projects;

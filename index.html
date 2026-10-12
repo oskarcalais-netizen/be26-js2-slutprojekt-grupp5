@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="./src/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>be25-js2-slutprojekt-grupp5</title>
   </head>
@@ -24,22 +24,22 @@
     </header>
 
     <main class="min-h-screen bg-slate-950 px-6 py-10">
-
       <!-- OVERVIEW -->
 
       <section id="overviewView">
-
         <h2 class="mb-8 text-3xl font-bold text-slate-100">Overview</h2>
-  
+
         <section id="projectsContainer" class="mb-12">
           <!-- HEADER ROW -->
           <div class="mb-5 flex items-center justify-between">
             <h3 class="text-2xl font-bold text-slate-100">Projects</h3>
-            <button id="newprojectbtn" type="button"
-             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
-             shadow-lg shadow-indigo-600/20
-             transition hover:bg-indigo-300 hover:scale-105"
-            >New project</button>
+            <button
+              id="newprojectbtn"
+              type="button"
+              class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
+            >
+              New project
+            </button>
           </div>
 
           <!-- FILTER BAR ROW -->
@@ -68,233 +68,157 @@
           </div>
 
           <!-- PROJECTS GRID -->
-          <div id="projectList" class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"></div>
+          <div
+            id="projectList"
+            class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
+          ></div>
         </section>
 
-  
         <!-- MEMBERS -->
 
         <section id="membersContainer">
-           <div class="mb-5 flex items-center justify-between">
-  
-             <h3 class="text-2xl font-bold text-slate-100">Members</h3>
-             <button id="newmemberbtn" type="button"
-             class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white
-             shadow-lg shadow-indigo-600/20
-             transition hover:bg-indigo-300 hover:scale-105"
-               >New member</button>
-  
-           </div>
-  
-          <ul id="memberList"
-          class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] ">
-           
-          </ul>
-        </section>
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-slate-100">Members</h3>
+            <button
+              id="newmemberbtn"
+              type="button"
+              class="flex gap-1 items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-300 hover:scale-105"
+            >
+              New member
+            </button>
+          </div>
 
+          <ul
+            id="memberList"
+            class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
+          ></ul>
+        </section>
       </section>
 
-       <!-- PROJECT VIEW -->
-      
+      <!-- PROJECT VIEW -->
+
       <section id="projectView" class="hidden">
+        <button
+          id="backToOverviewBtn"
+          type="button"
+          class="mb-8 text-indigo-400 hover:text-indigo-300"
+        >
+          ← Back to overview
+        </button>
 
-  <button
-    id="backToOverviewBtn"
-    type="button"
-    class="mb-8 text-indigo-400 hover:text-indigo-300"
-  >
-    ← Back to overview
-  </button>
+        <!-- PROJECT DETAILS -->
 
-  <!-- PROJECT DETAILS -->
+        <div id="projectDetails"></div>
 
-  <div id="projectDetails"></div>
+        <section class="mt-10">
+          <h3 class="mb-5 text-2xl font-bold text-slate-100">Members</h3>
 
-  <section class="mt-10">
-    <h3 class="mb-5 text-2xl font-bold text-slate-100">
-      Members
-    </h3>
+          <!-- PROJECT MEMBERS -->
 
-    <!-- PROJECT MEMBERS -->
+          <div
+            id="projectMembers"
+            class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
+          ></div>
+        </section>
 
-    <div
-      id="projectMembers"
-      class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
-    ></div>
-  </section>
+        <!-- SCRUM BOARD -->
 
+        <section class="mt-10">
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-slate-100">Tasks</h3>
+          </div>
 
-   <!-- SCRUM BOARD -->
+          <!-- TASK FILTER BAR -->
+          <div class="mb-6 flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              id="taskSearchInput"
+              placeholder="Filter by title..."
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <select
+              id="taskPrioritySelect"
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="" class="text-slate-400">Priority...</option>
+              <option value="Low" class="text-slate-100">Low</option>
+              <option value="Moderate" class="text-slate-100">Moderate</option>
+              <option value="High" class="text-slate-100">High</option>
+              <option value="Critical" class="text-slate-100">Critical</option>
+            </select>
+            <select
+              id="taskSortBySelect"
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="createdAt">Date Added</option>
+              <option value="title">Title</option>
+              <option value="priority">Priority</option>
+              <option value="assignedMember">Assigned Member</option>
+              <option value="category">Category</option>
+              <option value="deadline">Deadline</option>
+            </select>
+            <select
+              id="taskSortOrderSelect"
+              class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
 
-  <section class="mt-10">
+          <!-- SCRUM BOARD COLUMNS -->
+          <div id="projectTasks" class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+            <!-- NEW -->
+            <section>
+              <div class="mb-4 flex items-center justify-between">
+                <h4 class="text-xl font-bold text-slate-100">New</h4>
+              </div>
+              <div
+                id="newTasks"
+                class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+              ></div>
+            </section>
 
-    <div class="mb-5 flex items-center justify-between">
-      <h3 class="text-2xl font-bold text-slate-100">Tasks</h3>
-    </div>
+            <!-- IN PROGRESS -->
+            <section>
+              <div class="mb-4 flex items-center justify-between">
+                <h4 class="text-xl font-bold text-slate-100">In Progress</h4>
+              </div>
+              <div
+                id="inProgressTasks"
+                class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+              ></div>
+            </section>
 
-    <!-- TASK FILTER BAR -->
-    <div class="mb-6 flex flex-wrap items-center gap-3">
-      <input
-        type="text"
-        id="taskSearchInput"
-        placeholder="Filter by title..."
-        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      />
-     <select
-  id="taskPrioritySelect"
-  class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
->
-      <option value="" class="text-slate-400">Priority...</option>
-      <option value="Low" class="text-slate-100">Low</option>
-      <option value="Moderate" class="text-slate-100">Moderate</option>
-      <option value="High" class="text-slate-100">High</option>
-      <option value="Critical" class="text-slate-100">Critical</option>
-      </select>
-      <select
-        id="taskSortBySelect"
-        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      >
-        <option value="createdAt">Date Added</option>
-        <option value="title">Title</option>
-        <option value="priority">Priority</option>
-        <option value="assignedMember">Assigned Member</option>
-        <option value="category">Category</option>
-        <option value="deadline">Deadline</option>
-      </select>
-      <select
-        id="taskSortOrderSelect"
-        class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      >
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-    </div>
+            <!-- IN REVIEW -->
+            <section>
+              <div class="mb-4 flex items-center justify-between">
+                <h4 class="text-xl font-bold text-slate-100">In Review</h4>
+              </div>
+              <div
+                id="inReviewTasks"
+                class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+              ></div>
+            </section>
 
-    <div id="projectTasks" class="grid grid-cols-1 gap-6 lg:grid-cols-4">
-      <!-- COLUMNS: New, In Progress, In Review, Completed -->
-    </div>
-  </section>
-
-       <!-- NEW -->
-
-                <section>
-
-                    <div
-                        class="mb-4 flex items-center justify-between"
-                    >
-
-                        <h4
-                            class="text-xl font-bold text-slate-100"
-                        >
-                            New
-                        </h4>
-
-
-                       
-
-                    </div>
-
-
-                    <div
-                        id="newTasks"
-                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
-                    ></div>
-
-                </section>
-
-
-                <!-- IN PROGRESS -->
-
-                <section>
-
-                    <div
-                        class="mb-4 flex items-center justify-between"
-                    >
-
-                        <h4
-                            class="text-xl font-bold text-slate-100"
-                        >
-                            In Progress
-                        </h4>
-
-
-                       
-
-                    </div>
-
-
-                    <div
-                        id="inProgressTasks"
-                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
-                    ></div>
-
-                </section>
-
-                <!-- IN REVIEW -->
-
-                <section>
-
-                    <div
-                        class="mb-4 flex items-center justify-between"
-                    >
-
-                        <h4
-                            class="text-xl font-bold text-slate-100"
-                        >
-                            In Review
-                        </h4>
-
-
-                       
-
-                    </div>
-
-
-                    <div
-                        id="inReviewTasks"
-                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
-                    ></div>
-
-                </section>
-
-
-                <!-- COMPLETED -->
-
-                <section>
-
-                    <div
-                        class="mb-4 flex items-center justify-between"
-                    >
-
-                        <h4
-                            class="text-xl font-bold text-slate-100"
-                        >
-                            Completed
-                        </h4>
-
-
-                       
-
-                    </div>
-
-
-                    <div
-                        id="completedTasks"
-                        class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
-                    ></div>
-
-                </section>
-
-
-    </div>
-  </section>
-
-</section>
+            <!-- COMPLETED -->
+            <section>
+              <div class="mb-4 flex items-center justify-between">
+                <h4 class="text-xl font-bold text-slate-100">Completed</h4>
+              </div>
+              <div
+                id="completedTasks"
+                class="flex min-h-32 flex-col gap-4 rounded-xl bg-slate-900 p-4"
+              ></div>
+            </section>
+          </div>
+        </section>
+      </section>
     </main>
 
     <div id="memberContainer"></div>
     <div id="projectContainer"></div>
 
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
