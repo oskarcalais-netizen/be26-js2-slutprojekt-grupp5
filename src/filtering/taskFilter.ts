@@ -57,7 +57,7 @@ export function filterAndSortTasks(
     return true;
   });
 
-  return filteredTasks.sort((a, b) => {
+  return [...filteredTasks].sort((a, b) => {
     let comparison = 0;
 
     switch (sortBy) {

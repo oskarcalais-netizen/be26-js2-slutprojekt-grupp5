@@ -2,6 +2,7 @@
 //Dessa "funktioner" används för att hämta data från Firebase och eventuella uppdateringar hämtas i realtid.
 import "./add/newMember.ts";
 import "./add/newProject.ts";
+import { openNewTaskModal } from "./add/newTask.ts";
 
 import { getIcon } from "./ui/icons/icons.ts";
 
@@ -151,41 +152,55 @@ if (newMemberButton) {
   newMemberButton.prepend(plusIconMember);
 }
 
+const newTaskButton = document.getElementById("newtaskbtn");
+
+if (newTaskButton) {
+  const plusIconTask = getIcon("plus");
+  newTaskButton.prepend(plusIconTask);
+
+  newTaskButton.addEventListener("click", () => {
+    if (activeProjectId) {
+      openNewTaskModal(activeProjectId);
+    }
+  });
+}
+
 
 //Firebase
 const projectsRef = ref(db, "projects");
 const membersRef = ref(db, "members");
 const tasksRef = ref(db, "tasks");
 
-
+const VALID_PRIORITIES: Priority[] = ["low", "moderate", "high", "critical"];
+const VALID_CATEGORIES = ["Frontend", "Backend", "UX", "DevOps"] as const;
 
 const createTaskFromFirebase = (
     id: string,
     data: any
 ): Task => {
-    const task =
-        new Task(
-            id,
-            data.title ?? "",
-            data.description ?? "",
-            data.category as Category,
-            data.priority as Priority,
-            data.deadline ?? "",
-            data.projectId ?? data.projektId ?? ""
-        );
+    const safePriority: Priority = VALID_PRIORITIES.includes(data.priority) 
+        ? data.priority 
+        : "Low";
 
-    task.created =
-        data.created ??
-        new Date().toISOString();
+    const safeCategory: Category = (VALID_CATEGORIES as readonly string[]).includes(data.category)
+        ? (data.category as Category)
+        : (data.category as Category) || "Frontend";
 
-    task.status =
-        (data.status ?? "new") as TaskStatus;
+    const task = new Task(
+        id,
+        data.title?.trim() || "Untitled Task",
+        data.description?.trim() || "No description provided.",
+        safeCategory,
+        safePriority,
+        data.deadline || new Date().toISOString().split("T")[0],
+        data.projectId ?? data.projektId ?? ""
+    );
 
-    task.assignedTo =
-        data.assignedTo;
-
-    task.completedAt =
-        data.completedAt;
+    task.created = data.created || new Date().toISOString();
+    (task as any).createdAt = data.created || new Date().toISOString();
+    task.status = (data.status ?? "new") as TaskStatus;
+    task.assignedTo = data.assignedTo || null;
+    task.completedAt = data.completedAt || null;
 
     return task;
 };

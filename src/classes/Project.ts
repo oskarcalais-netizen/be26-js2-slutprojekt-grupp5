@@ -1,20 +1,20 @@
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 export class Project {
-  id: string;
-  title: string;
-  description: string;
-  deadline: string;
-  members: string[];
-  tasks: string[];
+  public readonly id: string;
+  public title: string;
+  public description: string;
+  public deadline: string;
+  public members: string[];
+  public tasks: string[];
 
   constructor(
     id: string,
     title: string,
     description: string,
     deadline: string,
-    members: string[],
-     tasks: string[] = []
+    members: string[] = [],
+    tasks: string[] = []
   ) {
     this.id = id;
     this.title = capitalizeFirstLetter(title);
@@ -24,13 +24,13 @@ export class Project {
     this.tasks = tasks;
   }
 
-  getData() {
-    return {
-      title: this.title,
-      description: this.description,
-      deadline: this.deadline,
-      members: this.members,
-      tasks: this.tasks,
-    };
+  public addTask(taskId: string): void {
+    if (!this.tasks.includes(taskId)) {
+      this.tasks.push(taskId);
+    }
+  }
+
+  public removeTask(taskId: string): void {
+    this.tasks = this.tasks.filter((id) => id !== taskId);
   }
 }
