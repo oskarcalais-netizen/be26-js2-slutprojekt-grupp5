@@ -9,8 +9,8 @@ import { onValue, ref } from "firebase/database";
 
 import { db } from "./firebaseconfig.ts";
 
-import { renderProjects } from "./renders/renderProjects.ts";
-import { renderMembers } from "./renders/renderMembers.ts";
+import { renderProjects } from "./renders/renderProjects-overview.ts";
+import { renderMembers } from "./renders/renderMembers-overview.ts";
 import { renderDetailedProject } from "./renders/renderDetailedProject.ts"
 import {renderScrumBoard } from "./renders/renderScrumBoard.ts"
 
@@ -214,12 +214,15 @@ function openProject(projectId: string) {
     overviewView?.classList.add("hidden");
     
     projectView?.classList.remove("hidden");
+
+    activeProjectId = projectId;
     
     renderDetailedProject(
     project,
     members,
     tasks
 );
+renderScrumBoard(project, members, tasks);
 }
 
 // RENDER ACTIVE PROJECT
@@ -337,7 +340,7 @@ onValue(
                 )
             );
 
-        console.log(tasks);
+       
 
         renderProject();
     }
