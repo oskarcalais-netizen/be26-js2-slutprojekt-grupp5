@@ -1,9 +1,9 @@
 //För testning av Firebase Realtime Database
 //Dessa "funktioner" används för att hämta data från Firebase och eventuella uppdateringar hämtas i realtid.
-import "./buttons/newMember.ts";
-import "./buttons/newProject.ts";
+import "./add/newMember.ts";
+import "./add/newProject.ts";
 
-import { createElement, icons } from "lucide";
+import { getIcon } from "./ui/icons/icons.ts";
 
 import { onValue, ref } from "firebase/database";
 
@@ -24,10 +24,10 @@ import type {
     TaskStatus
 } from "./types/types.ts";
 
-import { filterAndSortProjects } from './filtering/projectFilter';
-import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter';
-import { filterAndSortTasks } from './filtering/taskFilter';
-import type { TaskFilterOptions, TaskItem } from './filtering/taskFilter';
+import { filterAndSortProjects } from './filtering/projectFilter.ts';
+import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
+import { filterAndSortTasks } from './filtering/taskFilter.ts';
+import type { TaskFilterOptions, TaskItem } from './filtering/taskFilter.ts';
 
 let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data
 let rawTasks: TaskItem[] = []; // <-- Placeholder: Load actual tasks data for active project
@@ -136,30 +136,19 @@ let tasks: Record<string, Task> = {};
 
 let activeProjectId:string | null = null;
 
-// BUTTON ICONS
 
-const newProjectButton =
-    document.getElementById("newprojectbtn");
+// BUTTONS
 
+const newProjectButton = document.getElementById("newprojectbtn");
 if (newProjectButton) {
-    const plusIconProject =
-        createElement(icons.Plus);
-
-    newProjectButton.prepend(
-        plusIconProject
-    );
+  const plusIconProject = getIcon("plus");
+  newProjectButton.prepend(plusIconProject);
 }
 
-const newMemberButton =
-    document.getElementById("newmemberbtn");
-
+const newMemberButton = document.getElementById("newmemberbtn");
 if (newMemberButton) {
-    const plusIconMember =
-        createElement(icons.Plus);
-
-    newMemberButton.prepend(
-        plusIconMember
-    );
+  const plusIconMember = getIcon("plus");
+  newMemberButton.prepend(plusIconMember);
 }
 
 
