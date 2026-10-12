@@ -1,5 +1,5 @@
 import type { Project } from "../classes/Project.ts";
-import {getDeadlineInfo} from "../utils/deadlines.ts"
+import {getDeadlineInfo} from "../utils/getDeadlineInfo.ts"
 
 const projectsContainer = document.getElementById("projectList") as HTMLDivElement;
 

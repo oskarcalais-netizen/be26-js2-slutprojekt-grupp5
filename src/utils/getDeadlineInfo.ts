@@ -1,22 +1,19 @@
 import {
     parseISO,
-    format,
     differenceInDays,
     isPast,
     isToday
 } from "date-fns";
 
-import { sv } from "date-fns/locale";
+
+
+import { formatDate } from "./formatDate";
 
 export const getDeadlineInfo = (deadlineString: string) => {
 
     const deadline = parseISO(deadlineString);
 
-    const formattedDeadline = format(
-        deadline,
-        "d MMMM yyyy",
-        { locale: sv }
-    );
+    const formattedDeadline = formatDate(deadlineString);
 
     const daysLeft = differenceInDays(
         deadline,
