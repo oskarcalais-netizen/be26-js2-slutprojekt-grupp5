@@ -1,6 +1,9 @@
-import { get, ref } from "firebase/database";
+import { get, ref, push, update } from "firebase/database";
 import { db } from "../firebaseconfig";
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import { Project } from "../classes/Project";
+
+let projectIsSaving = false;
 
 const newProjectBtn = document.querySelector(
   "#newprojectbtn",
@@ -12,6 +15,10 @@ const projectContainer = document.querySelector(
 
 // Creates the project box.
 function openProjectBox() {
+  if (projectIsSaving === true) {
+    return;
+  }
+
   projectContainer.innerHTML = `
     <div class="formOverlay">
       <div class="formBox">
@@ -62,6 +69,10 @@ function openProjectBox() {
 
 // Closes the project box.
 function closeProjectBox() {
+  if (projectIsSaving === true) {
+    return;
+  }
+
   projectContainer.innerHTML = "";
 }
 
@@ -131,8 +142,120 @@ async function loadProjectMembers() {
   }
 }
 
+async function saveProject(
+  name: string,
+  description: string,
+  deadline: string,
+  selectedMembers: string[],
+) {
+  const message = document.querySelector(
+    "#projectMessage",
+  ) as HTMLParagraphElement;
+
+  const addProjectBtn = document.querySelector(
+    "#addProjectBtn",
+  ) as HTMLButtonElement;
+
+  projectIsSaving = true;
+  addProjectBtn.disabled = true;
+
+  message.textContent = "Saving project...";
+
+  setTimeout(async () => {
+    try {
+      const projectsRef = ref(db, "projects");
+      const newProjectRef = push(projectsRef);
+      const projectId = newProjectRef.key;
+
+      if (projectId === null) {
+        message.textContent = "Could not create the project. Try again.";
+
+        projectIsSaving = false;
+        addProjectBtn.disabled = false;
+
+        return;
+      }
+
+      const project = new Project(
+        projectId,
+        name,
+        description,
+        deadline,
+        selectedMembers,
+      );
+
+      const projectData = project.getData();
+
+      // Samla alla ändringar innan något sparas.
+      const changes = {};
+
+      const projectPath = "projects/" + projectId;
+
+      Object.assign(changes, {
+        [projectPath]: projectData,
+      });
+
+      // Gå igenom en vald medlem i taget.
+      for (let i = 0; i < selectedMembers.length; i++) {
+        const memberId = selectedMembers[i];
+
+        const memberRef = ref(db, "members/" + memberId);
+        const snapshot = await get(memberRef);
+        const member = snapshot.val();
+
+        if (member === null) {
+          message.textContent =
+            "A selected member no longer exists. Close the box and try again.";
+
+          projectIsSaving = false;
+          addProjectBtn.disabled = false;
+
+          return;
+        }
+
+        const memberProjects: string[] = [];
+
+        // Behåll medlemmens tidigare projekt.
+        if (member.projects) {
+          for (let j = 0; j < member.projects.length; j++) {
+            memberProjects.push(member.projects[j]);
+          }
+        }
+
+        // Lägg till det nya projektet.
+        memberProjects.push(projectId);
+
+        const memberProjectsPath = "members/" + memberId + "/projects";
+
+        Object.assign(changes, {
+          [memberProjectsPath]: memberProjects,
+        });
+      }
+
+      // Spara projektet och medlemskopplingarna tillsammans.
+      await update(ref(db), changes);
+
+      projectIsSaving = false;
+
+      closeProjectBox();
+    } catch {
+      message.textContent =
+        "The project could not be saved. Check your connection and try again.";
+
+      projectIsSaving = false;
+      addProjectBtn.disabled = false;
+    }
+  }, 1500);
+}
+
 function checkProject() {
-  const titleInput = document.querySelector("#projectTitle") as HTMLInputElement;
+  if (projectIsSaving === true) {
+    return;
+  }
+
+  const titleInput = document.querySelector(
+    "#projectTitle",
+  ) as HTMLInputElement;
 
   const descriptionInput = document.querySelector(
     "#projectDescription",
@@ -153,6 +276,8 @@ function checkProject() {
   const deadline = deadlineInput.value;
 
   let selectedMemberCount = 0;
+
+  const selectedMembers: string[] = [];
 
   message.textContent = "";
 
@@ -181,7 +306,9 @@ function checkProject() {
     const checkbox = memberCheckboxes[i] as HTMLInputElement;
 
     if (checkbox.checked === true) {
-      selectedMemberCount = selectedMemberCount + 1;
+      selectedMemberCount++;
+
+      selectedMembers.push(checkbox.value);
     }
   }
 
@@ -191,4 +318,6 @@ function checkProject() {
   }
 
   message.textContent = "The information is ready to save.";
+
+  saveProject(title, description, deadline, selectedMembers);
 }

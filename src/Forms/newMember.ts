@@ -1,6 +1,6 @@
 import { categories } from "../types/types";
 import { Member } from "../classes/Member";
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 import { push, ref } from "firebase/database";
 import { db } from "../firebaseconfig";
@@ -108,34 +108,34 @@ async function saveMember(name: string, selectedCategories: string[]) {
 
   message.textContent = "Saving member...";
 
-  try {
-    const membersRef = ref(db, "members");
-    const newMemberRef = push(membersRef);
-    const memberId = newMemberRef.key;
+  setTimeout(async () => {
+    try {
+      const membersRef = ref(db, "members");
+      const newMemberRef = push(membersRef);
+      const memberId = newMemberRef.key;
 
-    if (memberId === null) {
-      message.textContent = "Could not create the member. Try again.";
+      if (memberId === null) {
+        message.textContent = "Could not create the member. Try again.";
+
+        memberIsSaving = false;
+        addMemberBtn.disabled = false;
+
+        return;
+      }
+
+      const member = new Member(memberId, name, selectedCategories);
+
+      await member.save();
+
+      memberIsSaving = false;
+      closeMemberBox();
+    } catch {
+      message.textContent = "The member could not be saved. Try again.";
 
       memberIsSaving = false;
       addMemberBtn.disabled = false;
-
-      return;
     }
-
-    const member = new Member(memberId, name, selectedCategories);
-
-    await member.save();
-
-    setTimeout(() => {
-      memberIsSaving = false;
-      closeMemberBox();
-    }, 1000);
-  } catch {
-    message.textContent = "The member could not be saved. Try again.";
-
-    memberIsSaving = false;
-    addMemberBtn.disabled = false;
-  }
+  }, 1500);
 }
 
 function checkMember() {
