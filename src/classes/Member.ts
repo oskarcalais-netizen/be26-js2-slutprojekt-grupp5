@@ -1,6 +1,6 @@
 import { ref, set, remove } from "firebase/database";
 import { db } from "../firebaseconfig";
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 export class Member {
   id: string;
@@ -43,5 +43,17 @@ export class Member {
     const memberRef = ref(db, "members/" + this.id);
 
     await remove(memberRef);
+  }
+
+  // Lägger till ett projekt i medlemmens lista
+  addProject(projectId: string, changes: object) {
+    this.projects.push(projectId);
+
+    const memberProjectsPath = "members/" + this.id + "/projects";
+
+    // Lägg den uppdaterade listan bland ändringarna som ska sparas.
+    Object.assign(changes, {
+      [memberProjectsPath]: this.projects,
+    });
   }
 }

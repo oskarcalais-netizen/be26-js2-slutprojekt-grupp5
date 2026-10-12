@@ -15,7 +15,7 @@ const memberContainer = document.querySelector(
   "#memberContainer",
 ) as HTMLDivElement;
 
-// Creates the member box.
+// Visar formuläret för en ny medlem och kopplar knapparna till sina funktioner.
 function openMemberBox() {
   if (memberIsSaving === true) {
     return;
@@ -74,7 +74,7 @@ function openMemberBox() {
   addMemberBtn.addEventListener("click", checkMember);
 }
 
-// Closes the member box.
+// Stänger medlemsformuläret
 function closeMemberBox() {
   if (memberIsSaving === true) {
     return;
@@ -94,6 +94,7 @@ memberContainer.addEventListener("click", (event) => {
   }
 });
 
+// Skapar en medlem, sparar den och stänger formuläret när sparandet lyckas.
 async function saveMember(name: string, selectedCategories: string[]) {
   const message = document.querySelector(
     "#memberMessage",
@@ -138,6 +139,7 @@ async function saveMember(name: string, selectedCategories: string[]) {
   }, 1500);
 }
 
+// Kontrollerar namn och kategorier innan medlemmen sparas.
 function checkMember() {
   if (memberIsSaving === true) {
     return;
@@ -154,7 +156,8 @@ function checkMember() {
   const checkboxes = document.querySelectorAll(".memberCategoryCheckbox");
 
   const selectedCategories: string[] = [];
-  // Kontroll som visar om kryssrutan är ikryssad
+
+  // Går igenom kryssrutorna och samlar de valda kategorierna.
   for (let i = 0; i < checkboxes.length; i++) {
     const checkbox = checkboxes[i] as HTMLInputElement;
 

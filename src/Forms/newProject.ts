@@ -1,7 +1,8 @@
-import { get, ref, push, update } from "firebase/database";
+import { get, ref, push } from "firebase/database";
 import { db } from "../firebaseconfig";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { Project } from "../classes/Project";
+import { Member } from "../classes/Member";
 
 let projectIsSaving = false;
 
@@ -13,7 +14,7 @@ const projectContainer = document.querySelector(
   "#projectContainer",
 ) as HTMLDivElement;
 
-// Creates the project box.
+// Visar projektformuläret, kopplar knapparna och hämtar medlemmarna.
 function openProjectBox() {
   if (projectIsSaving === true) {
     return;
@@ -67,7 +68,7 @@ function openProjectBox() {
   loadProjectMembers();
 }
 
-// Closes the project box.
+// Stänger projektformuläret
 function closeProjectBox() {
   if (projectIsSaving === true) {
     return;
@@ -78,7 +79,7 @@ function closeProjectBox() {
 
 newProjectBtn.addEventListener("click", openProjectBox);
 
-// Closes the "New project" box when the user clicks outside it.
+// Stänger rutan när användaren klickar utanför den.
 projectContainer.addEventListener("click", (event) => {
   const background = projectContainer.querySelector(".formOverlay");
 
@@ -87,6 +88,7 @@ projectContainer.addEventListener("click", (event) => {
   }
 });
 
+// Hämtar medlemmarna från Firebase och visar dem som kryssrutor.
 async function loadProjectMembers() {
   const memberOptions = document.querySelector(
     "#projectMemberOptions",
@@ -114,6 +116,7 @@ async function loadProjectMembers() {
       return;
     }
 
+    // Skapar en kryssruta för varje medlem som hämtats från Firebase.
     for (const memberId in members) {
       const member = members[memberId];
 
@@ -142,6 +145,7 @@ async function loadProjectMembers() {
   }
 }
 
+// Skapar projektet
 async function saveProject(
   name: string,
   description: string,
@@ -184,16 +188,8 @@ async function saveProject(
         selectedMembers,
       );
 
-      const projectData = project.getData();
-
       // Samla alla ändringar innan något sparas.
       const changes = {};
-
-      const projectPath = "projects/" + projectId;
-
-      Object.assign(changes, {
-        [projectPath]: projectData,
-      });
 
       // Gå igenom en vald medlem i taget.
       for (let i = 0; i < selectedMembers.length; i++) {
@@ -213,27 +209,20 @@ async function saveProject(
           return;
         }
 
-        const memberProjects: string[] = [];
+        const selectedMember = new Member(
+          memberId,
+          member.name,
+          member.categories,
+          member.ongoingTasks,
+          member.projects,
+        );
 
-        // Behåll medlemmens tidigare projekt.
-        if (member.projects) {
-          for (let j = 0; j < member.projects.length; j++) {
-            memberProjects.push(member.projects[j]);
-          }
-        }
-
-        // Lägg till det nya projektet.
-        memberProjects.push(projectId);
-
-        const memberProjectsPath = "members/" + memberId + "/projects";
-
-        Object.assign(changes, {
-          [memberProjectsPath]: memberProjects,
-        });
+        // Lägg det nya projektets id i medlemmens lista
+        selectedMember.addProject(projectId, changes);
       }
 
       // Spara projektet och medlemskopplingarna tillsammans.
-      await update(ref(db), changes);
+      await project.save(changes);
 
       projectIsSaving = false;
 
@@ -248,6 +237,7 @@ async function saveProject(
   }, 1500);
 }
 
+// Kontrollerar projektets fält och valda medlemmar innan sparandet.
 function checkProject() {
   if (projectIsSaving === true) {
     return;
@@ -297,11 +287,7 @@ function checkProject() {
     return;
   }
 
-  // if (deadlineInput.checkValidity() === false) {
-  //   message.textContent = "Choose a valid deadline.";
-  //   return;
-  // }
-
+  // Räknar de valda medlemmarna
   for (let i = 0; i < memberCheckboxes.length; i++) {
     const checkbox = memberCheckboxes[i] as HTMLInputElement;
 
