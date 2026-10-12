@@ -1,5 +1,6 @@
 import { categories } from "../types/types";
 import { Member } from "../classes/Member";
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 import { push, ref } from "firebase/database";
 import { db } from "../firebaseconfig";
@@ -148,7 +149,7 @@ function checkMember() {
     "#memberMessage",
   ) as HTMLParagraphElement;
 
-  const name = nameInput.value.trim();
+  const name = capitalizeFirstLetter(nameInput.value);
 
   const checkboxes = document.querySelectorAll(".memberCategoryCheckbox");
 

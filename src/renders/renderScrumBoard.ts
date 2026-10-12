@@ -1,119 +1,111 @@
 import type { Member } from "../classes/Member.ts";
 import type { Project } from "../classes/Project.ts";
 import type { Task } from "../classes/Task.ts";
+import { filterAndSortTasks, type TaskFilterOptions, type PriorityLevel } from "../filtering/taskFilter.ts";
 
-import { renderNewTask} from "./scrumboard/renderNewTasks.ts";
+
+
+import {
+  renderNewTaskColumn,
+  renderInProgressTaskColumn,
+  renderInReviewTaskColumn,
+  renderCompletedTaskColumn,
+} from "./renderScrumBoardColumns.ts";
+
+let cachedProject: Project | null = null;
+let cachedMembers: Record<string, Member> = {};
+let cachedTasks: Record<string, Task> = {};
 
 const newTasksContainer = document.getElementById("newTasks") as HTMLDivElement;
 const inProgressTasksContainer = document.getElementById("inProgressTasks") as HTMLDivElement;
+const inReviewTasksContainer = document.getElementById("inReviewTasks") as HTMLDivElement;
 const completedTasksContainer = document.getElementById("completedTasks") as HTMLDivElement;
 
-// const newTaskCount = document.getElementById("newTaskCount") as HTMLSpanElement;
-// const inProgressTaskCount = document.getElementById("inProgressTaskCount") as HTMLSpanElement;
-// const completedTaskCount = document.getElementById("completedTaskCount") as HTMLSpanElement;
-
-
-const createSimpleTaskCard = (task: Task) => {
-    const card = document.createElement("article");
-
-    card.className =
-        "rounded-xl border border-slate-700 bg-slate-800 p-5";
-
-    const title =
-        document.createElement("h5");
-
-    title.textContent = task.title;
-
-    title.className =
-        "text-lg font-bold text-slate-100";
-
-    const description =
-        document.createElement("p");
-
-    description.textContent =
-        task.description;
-
-    description.className =
-        "mt-2 text-sm text-slate-400";
-
-    const priority =
-        document.createElement("p");
-
-    priority.textContent =
-        `Priority: ${task.priority}`;
-
-    priority.className =
-        "mt-3 text-sm text-indigo-400";
-
-    card.append(
-        title,
-        description,
-        priority
-    );
-
-    return card;
-};
+const taskSearchInput = document.querySelector("#taskSearchInput") as HTMLInputElement;
+const taskPrioritySelect = document.querySelector("#taskPrioritySelect") as HTMLSelectElement;
+const taskSortBySelect = document.querySelector("#taskSortBySelect") as HTMLSelectElement;
+const taskSortOrderSelect = document.querySelector("#taskSortOrderSelect") as HTMLSelectElement;
 
 export const renderScrumBoard = (
-    project: Project,
-    members: Record<string, Member>,
-    tasks: Record<string, Task>
+  project: Project,
+  members: Record<string, Member>,
+  tasks: Record<string, Task>
 ) => {
-    newTasksContainer.innerHTML = "";
-    inProgressTasksContainer.innerHTML = "";
-    completedTasksContainer.innerHTML = "";
+  cachedProject = project;
+  cachedMembers = members;
+  cachedTasks = tasks;
 
-    const projectTasks =
-        project.tasks
-            .map((taskId) => tasks[taskId])
-            .filter(
-                (task): task is Task =>
-                    task !== undefined
-            );
+  newTasksContainer.innerHTML = "";
+  inProgressTasksContainer.innerHTML = "";
+  inReviewTasksContainer.innerHTML = "";
+  completedTasksContainer.innerHTML = "";
 
-    const newTasks =
-        projectTasks.filter(
-            (task) => task.status === "new"
-        );
+  const projectTasks = project.tasks
+    .map(taskId => tasks[taskId])
+    .filter((task): task is Task => task !== undefined);
 
-    const inProgressTasks =
-        projectTasks.filter(
-            (task) => task.status === "in-progress"
-        );
+  const filterOptions: TaskFilterOptions = {
+    title: taskSearchInput?.value.trim(),
+    priority: (taskPrioritySelect?.value || undefined) as PriorityLevel | undefined,
+    sortBy: (taskSortBySelect?.value || 'createdAt') as any,
+    sortOrder: (taskSortOrderSelect?.value || 'asc') as 'asc' | 'desc',
+  };
 
-    const completedTasks =
-        projectTasks.filter(
-            (task) => task.status === "completed"
-        );
+  const tasksForFiltering = projectTasks.map(t => ({
+    ...t,
+    assignedMemberName: t.assignedTo ? members[t.assignedTo]?.name : undefined,
+    createdAt: (t as any).createdAt || new Date(0)
+  }));
 
-    // newTaskCount.textContent =
-    //     String(newTasks.length);
+  const filteredTasks = filterAndSortTasks(tasksForFiltering as any, filterOptions);
 
-    // inProgressTaskCount.textContent =
-    //     String(inProgressTasks.length);
-
-    // completedTaskCount.textContent =
-    //     String(completedTasks.length);
-
-    newTasks.forEach((task) => {
+  filteredTasks.forEach(taskItem => {
+    const task = tasks[taskItem.id] || (taskItem as unknown as Task);
+    switch (task.status) {
+      case "new":
         newTasksContainer.appendChild(
-            renderNewTask(
-                task,
-                project,
-                members
-            )
+          renderNewTaskColumn(task, project, members)
         );
-    });
+        break;
 
-    inProgressTasks.forEach((task) => {
+      case "in-progress":
         inProgressTasksContainer.appendChild(
-            createSimpleTaskCard(task)
+          renderInProgressTaskColumn(task, members)
         );
-    });
+        break;
 
-    completedTasks.forEach((task) => {
-        completedTasksContainer.appendChild(
-            createSimpleTaskCard(task)
+      case "in-review":
+        inReviewTasksContainer.appendChild(
+          renderInReviewTaskColumn(task, members)
         );
-    });
+        break;
+
+      case "completed":
+        completedTasksContainer.appendChild(
+          renderCompletedTaskColumn(task, project, members)
+        );
+        break;
+    }
+  });
 };
+
+function triggerTaskFilter() {
+  if (taskPrioritySelect) {
+    if (taskPrioritySelect.value === "") {
+      taskPrioritySelect.classList.add("text-slate-400");
+      taskPrioritySelect.classList.remove("text-slate-100");
+    } else {
+      taskPrioritySelect.classList.add("text-slate-100");
+      taskPrioritySelect.classList.remove("text-slate-400");
+    }
+  }
+
+  if (cachedProject) {
+    renderScrumBoard(cachedProject, cachedMembers, cachedTasks);
+  }
+}
+
+taskSearchInput?.addEventListener("input", triggerTaskFilter);
+taskPrioritySelect?.addEventListener("change", triggerTaskFilter);
+taskSortBySelect?.addEventListener("change", triggerTaskFilter);
+taskSortOrderSelect?.addEventListener("change", triggerTaskFilter);
