@@ -45,8 +45,8 @@ export function filterAndSortTasks(
     if (title && !task.title.toLowerCase().includes(title.toLowerCase())) {
       return false;
     }
-    if (priority && task.priority !== priority) {
-      return false;
+    if (priority && task.priority.toLowerCase() !== priority.toLowerCase()) {
+    return false;
     }
     if (assignedMemberId && task.assignedMemberId !== assignedMemberId) {
       return false;
@@ -62,27 +62,42 @@ export function filterAndSortTasks(
 
     switch (sortBy) {
       case 'title':
-        comparison = a.title.localeCompare(b.title);
+        comparison = (a.title || '').localeCompare(b.title || '');
         break;
-      case 'priority':
-        comparison = PRIORITY_WEIGHTS[a.priority] - PRIORITY_WEIGHTS[b.priority];
+
+      case 'priority': {
+        const weightA = PRIORITY_WEIGHTS[a.priority] || 0;
+        const weightB = PRIORITY_WEIGHTS[b.priority] || 0;
+        comparison = weightA - weightB;
         break;
-      case 'assignedMember':
+      }
+
+      case 'assignedMember': {
         const memberA = a.assignedMemberName || '';
         const memberB = b.assignedMemberName || '';
         comparison = memberA.localeCompare(memberB);
         break;
+      }
+
       case 'category':
-        comparison = a.category.localeCompare(b.category);
+        comparison = (a.category || '').localeCompare(b.category || '');
         break;
-      case 'deadline':
-        comparison = new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+
+      case 'deadline': {
+        const timeA = a.deadline ? new Date(a.deadline).getTime() : 0;
+        const timeB = b.deadline ? new Date(b.deadline).getTime() : 0;
+        comparison = (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
         break;
-      case 'createdAt':
-        comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+
+      case 'createdAt': {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        comparison = (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
         break;
+      }
     }
 
-    return sortOrder === 'asc' ? comparison : -comparison;
+    return sortOrder === 'desc' ? -comparison : comparison;
   });
 }

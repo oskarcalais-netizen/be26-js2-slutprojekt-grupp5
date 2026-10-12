@@ -9,8 +9,8 @@ import { onValue, ref } from "firebase/database";
 
 import { db } from "./firebaseconfig.ts";
 
-import { renderProjects } from "./renders/renderProjects-overview.ts";
-import { renderMembers } from "./renders/renderMembers-overview.ts";
+import { renderProjects } from "./renders/renderProjectsOverview.ts";
+import { renderMembers } from "./renders/renderMembersOverview.ts";
 import { renderDetailedProject } from "./renders/renderDetailedProject.ts"
 import {renderScrumBoard } from "./renders/renderScrumBoard.ts"
 
@@ -49,6 +49,7 @@ function updateAndRenderProjects(): void {
   const filteredProjects = filterAndSortProjects(rawProjects, options);
   
   renderProjectsList(filteredProjects); // <-- Placeholder: Call rendering function
+  
 }
 
 function getTaskFilterState(): TaskFilterOptions {
