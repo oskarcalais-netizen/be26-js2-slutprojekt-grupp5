@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { ref, update } from "firebase/database";
 import { db } from "../firebaseconfig";
 
@@ -60,5 +60,4 @@ export class Project {
 
     await update(databaseRef, changes);
   }
-
 }
