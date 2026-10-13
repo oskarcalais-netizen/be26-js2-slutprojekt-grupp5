@@ -36,7 +36,7 @@ export const renderMembers = (members: Record<string, Member>) => {
       "#memberMessage",
     ) as HTMLParagraphElement;
 
-    // Skapar delete knappen under varje member låda
+    // CREATES DELETE BUTTON
     const deleteMemberBtn = document.createElement("button");
 
     deleteMemberBtn.type = "button";
@@ -44,10 +44,16 @@ export const renderMembers = (members: Record<string, Member>) => {
     deleteMemberBtn.className = "deleteMemberBtn";
 
     deleteMemberBtn.addEventListener("click", async () => {
+      const isConfirmed = window.confirm("Are you sure you want to delete this member?");
+      
+      if (!isConfirmed) {
+        return;
+      }
+
       try {
         await member.delete();
       } catch {
-        message.textContent = "The member could not be saved. Try again.";
+        message.textContent = "The member could not be deleted. Try again.";
       }
     });
 
