@@ -54,7 +54,7 @@ function updateAndRenderProjects(): void {
   const options = getProjectFilterState();
   const filteredProjects = filterAndSortProjects(rawProjects, options);
 
-  renderProjectsList(filteredProjects); // <-- Placeholder: Call rendering function
+  renderProjectsList(filteredProjects);
 }
 
 function getTaskFilterState(): TaskFilterOptions {
