@@ -1,4 +1,6 @@
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { ref, update } from "firebase/database";
+import { db } from "../firebaseconfig";
 
 export class Project {
   public readonly id: string;
@@ -33,4 +35,30 @@ export class Project {
   public removeTask(taskId: string): void {
     this.tasks = this.tasks.filter((id) => id !== taskId);
   }
+
+  getData() {
+    return {
+      title: this.title,
+      description: this.description,
+      deadline: this.deadline,
+      members: this.members,
+      tasks: this.tasks,
+  }};
+
+    // Sparar projektet och medlemmarnas projektlistor tillsammans i Firebase.
+  async save(changes: object) {
+    const projectData = this.getData();
+    const projectPath = "projects/" + this.id;
+
+    // Lägg projektets information bland ändringarna som ska sparas.
+    Object.assign(changes, {
+      [projectPath]: projectData,
+    });
+
+    // Spara alla samlade ändringar i Firebase.
+    const databaseRef = ref(db);
+
+    await update(databaseRef, changes);
+  }
+
 }

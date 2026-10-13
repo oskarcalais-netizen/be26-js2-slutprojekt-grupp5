@@ -28,7 +28,7 @@ import type {
 import { filterAndSortProjects } from './filtering/projectFilter.ts';
 import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
 import { filterAndSortTasks } from './filtering/taskFilter.ts';
-import type { TaskFilterOptions, TaskItem } from './filtering/taskFilter.ts';
+import type { TaskFilterOptions, TaskItem } from './types/types.ts';
 
 let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data
 let rawTasks: TaskItem[] = []; // <-- Placeholder: Load actual tasks data for active project
@@ -172,7 +172,7 @@ const membersRef = ref(db, "members");
 const tasksRef = ref(db, "tasks");
 
 const VALID_PRIORITIES: Priority[] = ["low", "moderate", "high", "critical"];
-const VALID_CATEGORIES = ["Frontend", "Backend", "UX", "DevOps"] as const;
+const VALID_CATEGORIES: Category[] = ["UI/UX Design", "Backend Development", "QA", "Git Administration", "Frontend Development", "Database Management"];
 
 const createTaskFromFirebase = (
     id: string,
