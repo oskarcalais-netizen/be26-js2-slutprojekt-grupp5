@@ -1,7 +1,8 @@
 import type { Member } from "../classes/Member.ts";
 import type { Project } from "../classes/Project.ts";
 import type { Task } from "../classes/Task.ts";
-import { filterAndSortTasks, type TaskFilterOptions, type PriorityLevel } from "../filtering/taskFilter.ts";
+import { filterAndSortTasks } from "../filtering/taskFilter.ts";
+import type { TaskFilterOptions, Priority, TaskSortBy, TaskItem } from "../types/types.ts";
 
 import {
   renderNewTaskColumn,
@@ -29,18 +30,19 @@ const getVisibleProjectTasks = (
   tasks: Record<string, Task>,
   members: Record<string, Member>,
   filterOptions: TaskFilterOptions
-) => {
+): TaskItem[] => {
   const projectTasks = project.tasks
     .map((taskId) => tasks[taskId])
     .filter((task): task is Task => task !== undefined);
 
-  const tasksForFiltering = projectTasks.map((t) => ({
+  const tasksForFiltering: TaskItem[] = projectTasks.map((t) => ({
     ...t,
+    assignedMemberId: t.assignedTo || "",
     assignedMemberName: t.assignedTo ? members[t.assignedTo]?.name : undefined,
-    createdAt: (t as any).createdAt || t.created || new Date(0),
+    createdAt: t.created || new Date(0).toISOString(),
   }));
 
-  return filterAndSortTasks(tasksForFiltering as any, filterOptions);
+  return filterAndSortTasks(tasksForFiltering, filterOptions);
 };
 
 export const renderScrumBoard = (
@@ -59,8 +61,8 @@ export const renderScrumBoard = (
 
   const filterOptions: TaskFilterOptions = {
     title: taskSearchInput?.value.trim(),
-    priority: (taskPrioritySelect?.value || undefined) as PriorityLevel | undefined,
-    sortBy: (taskSortBySelect?.value || "createdAt") as any,
+    priority: (taskPrioritySelect?.value || undefined) as Priority | undefined,
+    sortBy: (taskSortBySelect?.value || "createdAt") as TaskSortBy,
     sortOrder: (taskSortOrderSelect?.value || "asc") as "asc" | "desc",
   };
 
