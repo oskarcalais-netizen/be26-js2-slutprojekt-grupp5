@@ -1,43 +1,59 @@
 import type { Task } from "../classes/Task";
 import { formatDate } from "../utils/formatDate";
+import { getDeadlineInfo } from "../utils/getDeadlineInfo";
+import { getPriorityBadge } from "../ui/icons/icons";
 
 export const createBaseTaskCard = (task: Task) => {
-    
-    const taskCard = document.createElement("article");
-     taskCard.className =
-        "rounded-xl border border-slate-700 bg-slate-800 p-5 shadow-lg";
+  const taskCard = document.createElement("article");
+  taskCard.className =
+    "relative rounded-xl border border-slate-700 bg-slate-800 p-5 shadow-lg flex flex-col gap-2";
 
-    const taskTitle = document.createElement("h5");
+    // 1. PRIORITY INDICATOR (Upper left corner)
+  const priorityBadge = getPriorityBadge(task.priority);
 
-    taskTitle.textContent = task.title;
+  const headerContainer = document.createElement("div");
+  headerContainer.className = "flex items-center gap-2";
 
-    taskTitle.className ="text-lg font-bold text-slate-100";
+  const priorityEmojiEl = document.createElement("span");
+  priorityEmojiEl.textContent = priorityBadge.emoji;
+  priorityEmojiEl.className = "text-base leading-none";
 
-    const taskDescription = document.createElement("p")
-    taskDescription.textContent = task.description;
+  const taskTitle = document.createElement("h5");
+  taskTitle.textContent = task.title;
+  taskTitle.className = "text-lg font-bold text-slate-100";
 
-    taskDescription.className ="mt-2 text-sm leading-5 text-slate-400";
+  headerContainer.append(priorityEmojiEl, taskTitle);
 
-    const taskCategory =document.createElement("p");
+  // 3. DESCRIPTION
+  const taskDescription = document.createElement("p");
+  taskDescription.textContent = task.description;
+  taskDescription.className = "text-sm leading-5 text-slate-400";
 
-    taskCategory.textContent =`Category: ${task.category}`;
+  // 4. CATEGORY
+  const taskCategory = document.createElement("p");
+  taskCategory.textContent = `Category: ${task.category}`;
+  taskCategory.className = "mt-1 text-sm text-indigo-400";
 
-    taskCategory.className ="mt-3 text-sm text-indigo-400";
+  // 5. DATE CREATED
+  const createdTaskDate = document.createElement("p");
+  createdTaskDate.textContent = `Created: ${formatDate(task.created)}`;
+  createdTaskDate.className = "text-sm text-slate-500";
 
-    const createdTaskDate = document.createElement("p");
+  // 6. COLOR CODED DEADLINE TEXT (same as project cards)
+  const deadlineStr = typeof task.deadline === 'string' ? task.deadline : String(task.deadline ?? '');
+  const deadlineInfo = getDeadlineInfo(deadlineStr);
+  
+  const taskDeadlineEl = document.createElement("p");
+  taskDeadlineEl.textContent = deadlineInfo.text;
+  taskDeadlineEl.className = `mt-3 border-t border-slate-700 pt-3 text-sm font-semibold ${deadlineInfo.colorClass}`;
 
-    createdTaskDate.textContent = `Created: ${formatDate(task.created)}`;
+  taskCard.append(
+    headerContainer,
+    taskDescription,
+    taskCategory,
+    createdTaskDate,
+    taskDeadlineEl
+  );
 
-    createdTaskDate.className ="mt-2 text-sm text-slate-500";
-
-     taskCard.append(
-        taskTitle,
-        taskDescription,
-        taskCategory,
-        createdTaskDate
-    );
-
-
-    return taskCard;
-
-}
+  return taskCard;
+};
