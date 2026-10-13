@@ -1,30 +1,13 @@
-export type PriorityLevel = 'Low' | 'Moderate' | 'High' | 'Critical';
+import type { TaskItem , TaskFilterOptions } from "../types/types";
 
-export interface TaskFilterOptions {
-  title?: string;
-  priority?: PriorityLevel;
-  assignedMemberId?: string;
-  category?: string;
-  sortBy?: 'title' | 'priority' | 'assignedMember' | 'category' | 'deadline' | 'createdAt';
-  sortOrder?: 'asc' | 'desc';
-}
-
-export interface TaskItem {
-  id: string;
-  title: string;
-  priority: PriorityLevel;
-  assignedMemberId: string;
-  assignedMemberName?: string;
-  category: string;
-  deadline: string | Date;
-  createdAt: string | Date; // <-- Placeholder
-  [key: string]: any;
-}
-
-const PRIORITY_WEIGHTS: Record<PriorityLevel, number> = {
+const PRIORITY_WEIGHTS: Record<string, number> = {
+  low: 1,
   Low: 1,
+  moderate: 2,
   Moderate: 2,
+  high: 3,
   High: 3,
+  critical: 4,
   Critical: 4
 };
 
@@ -46,7 +29,7 @@ export function filterAndSortTasks(
       return false;
     }
     if (priority && task.priority.toLowerCase() !== priority.toLowerCase()) {
-    return false;
+      return false;
     }
     if (assignedMemberId && task.assignedMemberId !== assignedMemberId) {
       return false;
@@ -57,7 +40,7 @@ export function filterAndSortTasks(
     return true;
   });
 
-  return filteredTasks.sort((a, b) => {
+  return [...filteredTasks].sort((a, b) => {
     let comparison = 0;
 
     switch (sortBy) {

@@ -2,9 +2,9 @@
   "members": {
     "member-1": {
       "categories": [
-        "Backend Engineer",
-        "Frontend Developer",
-        "Database manager"
+        "Backend Development",
+        "Frontend Development",
+        "Database Management"
       ],
       "name": "Diana Paragina",
       "ongoingTasks": [
@@ -21,9 +21,9 @@
     },
     "member-2": {
       "categories": [
-        "Git admin",
-        "Frontend Developer",
-        "QA manager"
+        "Git Administration",
+        "Backend Development",
+        "QA"
       ],
       "name": "Oskar Calais",
       "ongoingTasks": [
@@ -38,9 +38,9 @@
     },
     "member-3": {
       "categories": [
-        "UI/UX Designer",
-        "Backend Engineer",
-        "QA manager"
+        "UI/UX Design",
+        "Backend Development",
+        "QA"
       ],
       "name": "Zana Ibrahim",
       "ongoingTasks": [
@@ -110,7 +110,7 @@
   "tasks": {
     "task-1": {
       "assignedTo": "member-1",
-      "category": "Frontend Developer",
+      "category": "Backend Development",
       "created": "2026-10-05",
       "deadline": "2026-10-20",
       "description": "Implement a responsive navigation menu for desktop and mobile.",
@@ -120,7 +120,7 @@
       "title": "Build Responsive Navigation"
     },
     "task-2": {
-      "category": "Backend Engineer",
+      "category": "Backend Development",
       "created": "2026-10-04",
       "deadline": "2026-10-22",
       "description": "Create backend endpoints for user login, registration and authentication.",
@@ -131,7 +131,7 @@
     },
     "task-3": {
       "assignedTo": "member-3",
-      "category": "UI/UX Designer",
+      "category": "UI/UX Design",
       "created": "2026-09-28",
       "deadline": "2026-10-15",
       "description": "Create a clear user flow for creating and managing bookings.",
@@ -141,7 +141,7 @@
       "title": "Design User Flow"
     },
     "task-4": {
-      "category": "Frontend Developer",
+      "category": "Backend Development",
       "created": "2026-10-05",
       "deadline": "2026-11-01",
       "description": "Build the main dashboard for mobile users.",
@@ -151,7 +151,7 @@
       "title": "Create Mobile Dashboard"
     },
     "task-5": {
-      "category": "Git admin",
+      "category": "Git Administration",
       "created": "2026-10-05",
       "deadline": "2026-10-25",
       "description": "Define and configure user roles and permissions in the application.",
@@ -162,7 +162,7 @@
     },
     "task-6": {
       "assignedTo": "member-3",
-      "category": "QA manager",
+      "category": "QA",
       "created": "2026-10-03",
       "deadline": "2026-10-23",
       "description": "Perform functional testing of the main administration features.",
@@ -173,7 +173,7 @@
     },
     "task-7": {
       "assignedTo": "member-3",
-      "category": "UI/UX Designer",
+      "category": "UI/UX Design",
       "created": "2026-10-01",
       "deadline": "2026-10-10",
       "description": "Define the structure and guidelines for the shared design system.",

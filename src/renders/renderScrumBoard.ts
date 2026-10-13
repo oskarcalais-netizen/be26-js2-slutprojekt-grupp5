@@ -1,9 +1,8 @@
 import type { Member } from "../classes/Member.ts";
 import type { Project } from "../classes/Project.ts";
 import type { Task } from "../classes/Task.ts";
-import { filterAndSortTasks, type TaskFilterOptions, type PriorityLevel } from "../filtering/taskFilter.ts";
-
-
+import { filterAndSortTasks } from "../filtering/taskFilter.ts";
+import type { TaskFilterOptions, Priority, TaskSortBy, TaskItem } from "../types/types.ts";
 
 import {
   renderNewTaskColumn,
@@ -26,6 +25,26 @@ const taskPrioritySelect = document.querySelector("#taskPrioritySelect") as HTML
 const taskSortBySelect = document.querySelector("#taskSortBySelect") as HTMLSelectElement;
 const taskSortOrderSelect = document.querySelector("#taskSortOrderSelect") as HTMLSelectElement;
 
+const getVisibleProjectTasks = (
+  project: Project,
+  tasks: Record<string, Task>,
+  members: Record<string, Member>,
+  filterOptions: TaskFilterOptions
+): TaskItem[] => {
+  const projectTasks = project.tasks
+    .map((taskId) => tasks[taskId])
+    .filter((task): task is Task => task !== undefined);
+
+  const tasksForFiltering: TaskItem[] = projectTasks.map((t) => ({
+    ...t,
+    assignedMemberId: t.assignedTo || "",
+    assignedMemberName: t.assignedTo ? members[t.assignedTo]?.name : undefined,
+    createdAt: t.created || new Date(0).toISOString(),
+  }));
+
+  return filterAndSortTasks(tasksForFiltering, filterOptions);
+};
+
 export const renderScrumBoard = (
   project: Project,
   members: Record<string, Member>,
@@ -40,26 +59,16 @@ export const renderScrumBoard = (
   inReviewTasksContainer.innerHTML = "";
   completedTasksContainer.innerHTML = "";
 
-  const projectTasks = project.tasks
-    .map(taskId => tasks[taskId])
-    .filter((task): task is Task => task !== undefined);
-
   const filterOptions: TaskFilterOptions = {
     title: taskSearchInput?.value.trim(),
-    priority: (taskPrioritySelect?.value || undefined) as PriorityLevel | undefined,
-    sortBy: (taskSortBySelect?.value || 'createdAt') as any,
-    sortOrder: (taskSortOrderSelect?.value || 'asc') as 'asc' | 'desc',
+    priority: (taskPrioritySelect?.value || undefined) as Priority | undefined,
+    sortBy: (taskSortBySelect?.value || "createdAt") as TaskSortBy,
+    sortOrder: (taskSortOrderSelect?.value || "asc") as "asc" | "desc",
   };
 
-  const tasksForFiltering = projectTasks.map(t => ({
-    ...t,
-    assignedMemberName: t.assignedTo ? members[t.assignedTo]?.name : undefined,
-    createdAt: (t as any).createdAt || new Date(0)
-  }));
+  const filteredTasks = getVisibleProjectTasks(project, tasks, members, filterOptions);
 
-  const filteredTasks = filterAndSortTasks(tasksForFiltering as any, filterOptions);
-
-  filteredTasks.forEach(taskItem => {
+  filteredTasks.forEach((taskItem) => {
     const task = tasks[taskItem.id] || (taskItem as unknown as Task);
     switch (task.status) {
       case "new":
