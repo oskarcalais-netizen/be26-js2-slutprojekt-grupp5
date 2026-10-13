@@ -151,7 +151,7 @@ let tasks: Record<string, Task> = {};
 let activeProjectId: string | null = null;
 
 
-const newProjectButton = document.getElementById("newprojectbtn");
+//BUTTONS
 
 const newProjectButton = document.getElementById("newprojectbtn");
 if (newProjectButton) {
