@@ -1,7 +1,7 @@
 //För testning av Firebase Realtime Database
 //Dessa "funktioner" används för att hämta data från Firebase och eventuella uppdateringar hämtas i realtid.
 
-import { openNewTaskModal } from "./add/newTask.ts";
+import { openNewTaskModal } from "./Forms/newTask.ts";
 import "./Forms/newMember.ts";
 import "./Forms/newProject.ts";
 
