@@ -22,8 +22,8 @@ import { Task } from "./classes/Task.ts";
 
 import { categories as VALID_CATEGORIES, PRIORITIES, type Category, type Priority, type TaskStatus , type TaskFilterOptions , type TaskItem} from './types/types.ts';
 
-import { filterAndSortProjects } from './filtering/projectFilter.ts';
-import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
+import { filterAndSortProjects } from '../src/filtering/projectFilter.ts';
+import type { ProjectItem, ProjectFilterOptions } from "../src/types/types";
 import { filterAndSortTasks } from './filtering/taskFilter.ts';
 
 let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data

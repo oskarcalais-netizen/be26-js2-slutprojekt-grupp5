@@ -16,8 +16,10 @@ export const getIcon = (name: IconName): SVGElement => {
   }
 };
 
-export const getPriorityBadge = (priority: Priority): { emoji: string; colorClass: string } => {
-  switch (priority) {
+export const getPriorityBadge = (priority: Priority | string): { emoji: string; colorClass: string } => {
+  const normalized = (priority || "").toLowerCase();
+
+  switch (normalized) {
     case "critical":
       return { emoji: "🔴", colorClass: "text-red-500" };
     case "high":

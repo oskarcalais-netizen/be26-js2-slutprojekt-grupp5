@@ -16,7 +16,7 @@ export const createBaseTaskCard = (task: Task) => {
 
   const priorityEmojiEl = document.createElement("span");
   priorityEmojiEl.textContent = priorityBadge.emoji;
-  priorityEmojiEl.className = "text-base leading-none";
+  priorityEmojiEl.className = "priority-emoji text-base leading-none";
 
   const taskTitle = document.createElement("h5");
   taskTitle.textContent = task.title;

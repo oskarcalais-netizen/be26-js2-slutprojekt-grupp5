@@ -1,4 +1,5 @@
-import { filterAndSortProjects, type ProjectFilterOptions, type ProjectItem } from '../filtering/projectFilter.ts';
+import { filterAndSortProjects } from '../filtering/projectFilter.ts';
+import type { ProjectItem, ProjectFilterOptions } from "../types/types";
 import type { Project } from "../classes/Project.ts";
 import {getDeadlineInfo} from "../utils/getDeadlineInfo.ts"
 
