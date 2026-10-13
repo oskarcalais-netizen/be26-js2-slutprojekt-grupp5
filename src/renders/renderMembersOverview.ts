@@ -32,9 +32,9 @@ export const renderMembers = (members: Record<string, Member>) => {
     memberTasks.className =
       "mt-3 border-t border-slate-700 pt-3 text-sm font-medium text-cyan-400";
 
-    const message = document.querySelector(
-      "#memberMessage",
-    ) as HTMLParagraphElement;
+    const message = document.createElement("p");
+    message.hidden = true;
+    message.style.color = "#fcd34d";
 
     // CREATES DELETE BUTTON
     const deleteMemberBtn = document.createElement("button");
@@ -43,18 +43,67 @@ export const renderMembers = (members: Record<string, Member>) => {
     deleteMemberBtn.textContent = "Delete member";
     deleteMemberBtn.className = "deleteMemberBtn";
 
+    // Skapar en extra fråga innan borttagningen av medlem i varje member låda
+    const cancelDeleteBtn = document.createElement("button");
+
+    cancelDeleteBtn.type = "button";
+    cancelDeleteBtn.textContent = "No";
+    cancelDeleteBtn.className = "deleteMemberBtn";
+    cancelDeleteBtn.hidden = true;
+
+    let confirmationQuestion = false;
+
     deleteMemberBtn.addEventListener("click", async () => {
-      const isConfirmed = window.confirm("Are you sure you want to delete this member?");
-      
-      if (!isConfirmed) {
+      if (deleteMemberBtn.disabled === true) {
         return;
       }
+
+      // Medlemmen ska inte kunna tas bort om den är kopplat till någon projekt
+      if (member.projects.length > 0) {
+        message.textContent =
+          "This member belongs to a project and cannot be deleted.";
+
+        message.hidden = false;
+
+        return;
+      }
+
+      if (confirmationQuestion === false) {
+        message.textContent = "Are you sure you want to delete this member?";
+        message.hidden = false;
+
+        deleteMemberBtn.textContent = "Yes, delete";
+        cancelDeleteBtn.hidden = false;
+
+        confirmationQuestion = true;
+        return;
+      }
+
+      deleteMemberBtn.disabled = true;
+      cancelDeleteBtn.disabled = true;
 
       try {
         await member.delete();
       } catch {
         message.textContent = "The member could not be deleted. Try again.";
+
+        deleteMemberBtn.disabled = false;
+        cancelDeleteBtn.disabled = false;
       }
+    });
+
+    cancelDeleteBtn.addEventListener("click", () => {
+      if (deleteMemberBtn.disabled === true) {
+        return;
+      }
+
+      confirmationQuestion = false;
+
+      message.textContent = "";
+      message.hidden = true;
+
+      cancelDeleteBtn.hidden = true;
+      deleteMemberBtn.textContent = "Delete member";
     });
 
     memberListItem.append(
@@ -62,7 +111,9 @@ export const renderMembers = (members: Record<string, Member>) => {
       memberCategory,
       memberProject,
       memberTasks,
+      message,
       deleteMemberBtn,
+      cancelDeleteBtn,
     );
 
     membersListContainer.append(memberListItem);

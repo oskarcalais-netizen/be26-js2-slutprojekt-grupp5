@@ -112,6 +112,7 @@ button {
 /* Styling delete member button */
 .deleteMemberBtn {
   margin-top: 16px;
+  margin-right: 10px;
   padding: 8px 16px;
   background-color: #b91c1c;
   color: white;
