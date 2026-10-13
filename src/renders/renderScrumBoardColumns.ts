@@ -3,12 +3,12 @@ import type { Task } from "../classes/Task.ts";
 import type { Project } from "../classes/Project.ts";
 import type { Member } from "../classes/Member.ts";
 
-import {createBaseTaskCard} from "../components/baseTaskCard.ts";
-import { createEditableFields } from "../utils/createEditableFields.ts";
-import {createAssignedMemberInfo, createMemberSelection} from "../utils/createMemberInfo.ts";
+import {createBaseTaskCard} from "../ui/baseTaskCard.ts";
+import { createEditableFields } from "../ui/createEditableFields.ts";
+import {createAssignedMemberInfo, createMemberSelection} from "../ui/createMemberInfo.ts";
 import { ref, update } from "firebase/database";
 import { db } from "../firebaseconfig.ts";
-import { createActionButton } from "../utils/createActionButton.ts";
+import { createActionButton } from "../ui/createActionButton.ts";
 import { formatDate } from "../utils/formatDate.ts";
 
 
