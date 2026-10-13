@@ -1,6 +1,17 @@
 import { ref, push, update, get } from "firebase/database";
 import { db } from "../firebaseconfig";
-import type { Category, Priority } from "../types/types";
+import { categories , type Category, type Priority } from "../types/types";
+
+const newTaskCategorySelect = document.querySelector("#newTaskCategory") as HTMLSelectElement;
+
+export const populateCategoryDropdown = () => {
+  if (!newTaskCategorySelect) return;
+
+  newTaskCategorySelect.innerHTML = `
+    <option value="" disabled selected>Choose category</option>
+    ${categories.map((category) => `<option value="${category}">${category}</option>`).join("")}
+  `;
+};
 
 const dialog = document.createElement("dialog");
 dialog.className =
@@ -36,13 +47,11 @@ dialog.innerHTML = `
         <label class="block text-sm font-medium text-slate-300 mb-1">Category</label>
         <select
           id="newTaskCategory"
-          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="Frontend">Frontend</option>
-          <option value="Backend">Backend</option>
-          <option value="UX">UX</option>
-          <option value="DevOps">DevOps</option>
-        </select>
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+>
+  <option value="" disabled selected class="text-slate-400">Choose category...</option>
+  ${categories.map((category) => `<option value="${category}" class="text-slate-100 bg-slate-800">${category}</option>`).join("")}
+</select>
       </div>
 
       <div>
@@ -92,14 +101,31 @@ dialog.innerHTML = `
 
 document.body.appendChild(dialog);
 
+const categorySelectEl = dialog.querySelector("#newTaskCategory") as HTMLSelectElement;
+categorySelectEl?.addEventListener("change", () => {
+  if (categorySelectEl.value) {
+    categorySelectEl.classList.remove("text-slate-400");
+    categorySelectEl.classList.add("text-slate-100");
+  } else {
+    categorySelectEl.classList.add("text-slate-400");
+    categorySelectEl.classList.remove("text-slate-100");
+  }
+});
+
 let currentProjectId: string | null = null;
 
 export const openNewTaskModal = (projectId: string) => {
   currentProjectId = projectId;
   const form = dialog.querySelector("#newTaskForm") as HTMLFormElement;
   const errorMessage = dialog.querySelector("#newTaskErrorMessage") as HTMLParagraphElement;
+  const categorySelect = dialog.querySelector("#newTaskCategory") as HTMLSelectElement;
   
   form.reset();
+
+  if (categorySelect) {
+    categorySelect.classList.add("text-slate-400");
+    categorySelect.classList.remove("text-slate-100");
+  }
   errorMessage.classList.add("hidden");
   dialog.showModal();
 };
@@ -122,7 +148,7 @@ form.addEventListener("submit", async (e) => {
 
   const title = titleInput.value.trim();
   const description = descriptionInput.value.trim();
-  const category = categorySelect.value as Category;
+  const selectedCategory = categorySelect.value as Category;
   const priority = prioritySelect.value as Priority;
   const deadline = deadlineInput.value;
 
@@ -134,6 +160,12 @@ form.addEventListener("submit", async (e) => {
 
   if (!deadline) {
     errorMessage.textContent = "Please select a valid deadline date.";
+    errorMessage.classList.remove("hidden");
+    return;
+  }
+
+  if (!selectedCategory) {
+    errorMessage.textContent = "Please select a category.";
     errorMessage.classList.remove("hidden");
     return;
   }
@@ -156,7 +188,7 @@ form.addEventListener("submit", async (e) => {
     const newTaskData = {
       title,
       description,
-      category,
+      category: selectedCategory,
       priority,
       deadline,
       projectId: currentProjectId,
