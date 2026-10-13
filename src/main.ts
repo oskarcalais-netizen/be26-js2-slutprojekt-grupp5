@@ -20,12 +20,11 @@ import { Project } from "./classes/Project.ts";
 import { Member } from "./classes/Member.ts";
 import { Task } from "./classes/Task.ts";
 
-import type { Category, Priority, TaskStatus } from "./types/types.ts";
+import { categories as VALID_CATEGORIES, PRIORITIES, type Category, type Priority, type TaskStatus , type TaskFilterOptions , type TaskItem} from './types/types.ts';
 
 import { filterAndSortProjects } from './filtering/projectFilter.ts';
 import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
 import { filterAndSortTasks } from './filtering/taskFilter.ts';
-import type { TaskFilterOptions, TaskItem } from './types/types.ts';
 
 let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data
 let rawTasks: TaskItem[] = []; // <-- Placeholder: Load actual tasks data for active project
@@ -186,38 +185,37 @@ const projectsRef = ref(db, "projects");
 const membersRef = ref(db, "members");
 const tasksRef = ref(db, "tasks");
 
-const VALID_PRIORITIES: Priority[] = ["low", "moderate", "high", "critical"];
-const VALID_CATEGORIES: Category[] = ["UI/UX Design", "Backend Development", "QA", "Git Administration", "Frontend Development", "Database Management"];
+const VALID_PRIORITIES: Priority[] = (PRIORITIES as Priority[]) || ["low", "moderate", "high", "critical", "Low", "Moderate", "High", "Critical"];
 
 const createTaskFromFirebase = (
-    id: string,
-    data: any
+  id: string,
+  data: any
 ): Task => {
-    const safePriority: Priority = VALID_PRIORITIES.includes(data.priority) 
-        ? data.priority 
-        : "Low";
+  const safePriority: Priority = (VALID_PRIORITIES as string[]).includes(data.priority)
+    ? data.priority
+    : "Low";
 
-    const safeCategory: Category = (VALID_CATEGORIES as readonly string[]).includes(data.category)
-        ? (data.category as Category)
-        : (data.category as Category) || "Frontend";
+  const safeCategory: Category = (VALID_CATEGORIES as readonly string[]).includes(data.category)
+    ? (data.category as Category)
+    : "Frontend Development";
 
-    const task = new Task(
-        id,
-        data.title?.trim() || "Untitled Task",
-        data.description?.trim() || "No description provided.",
-        safeCategory,
-        safePriority,
-        data.deadline || new Date().toISOString().split("T")[0],
-        data.projectId ?? data.projektId ?? ""
-    );
+  const task = new Task(
+    id,
+    data.title?.trim() || "Untitled Task",
+    data.description?.trim() || "No description provided.",
+    safeCategory,
+    safePriority,
+    data.deadline || new Date().toISOString().split("T")[0],
+    data.projectId ?? data.projektId ?? ""
+  );
 
-    task.created = data.created || new Date().toISOString();
-    (task as any).createdAt = data.created || new Date().toISOString();
-    task.status = (data.status ?? "new") as TaskStatus;
-    task.assignedTo = data.assignedTo || null;
-    task.completedAt = data.completedAt || null;
+  task.created = data.created || new Date().toISOString();
+  task.created = data.created || new Date().toISOString();
+  task.status = (data.status ?? "new") as TaskStatus;
+  task.assignedTo = data.assignedTo || null;
+  task.completedAt = data.completedAt || null;
 
-    return task;
+  return task;
 };
 
 // OPEN PROJECT
