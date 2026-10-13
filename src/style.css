@@ -4,6 +4,10 @@ button {
   cursor: pointer;
 }
 
+h1 img {
+  height: 68px;
+}
+
 /* Det mörka lagret bakom boxen. */
 .formOverlay {
   position: fixed;
