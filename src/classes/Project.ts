@@ -1,4 +1,7 @@
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+
+import { ref, update } from "firebase/database";
+import { db } from "../firebaseconfig";
 
 export class Project {
   id: string;
@@ -14,7 +17,7 @@ export class Project {
     description: string,
     deadline: string,
     members: string[],
-     tasks: string[] = []
+    tasks: string[] = [],
   ) {
     this.id = id;
     this.title = capitalizeFirstLetter(title);
@@ -32,5 +35,21 @@ export class Project {
       members: this.members,
       tasks: this.tasks,
     };
+  }
+
+  // Sparar projektet och medlemmarnas projektlistor tillsammans i Firebase.
+  async save(changes: object) {
+    const projectData = this.getData();
+    const projectPath = "projects/" + this.id;
+
+    // Lägg projektets information bland ändringarna som ska sparas.
+    Object.assign(changes, {
+      [projectPath]: projectData,
+    });
+
+    // Spara alla samlade ändringar i Firebase.
+    const databaseRef = ref(db);
+
+    await update(databaseRef, changes);
   }
 }
