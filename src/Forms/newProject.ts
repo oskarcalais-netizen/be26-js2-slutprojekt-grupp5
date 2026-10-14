@@ -281,7 +281,6 @@ function checkProject() {
     return;
   }
 
-  // Kontrollen för deadline behövs fixas, ej hunnit med!
   if (deadline === "") {
     message.textContent = "Choose a deadline.";
     return;
