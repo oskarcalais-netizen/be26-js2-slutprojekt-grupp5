@@ -45,13 +45,13 @@ export class Member {
     await remove(memberRef);
   }
 
-  // Lägger till ett projekt i medlemmens lista
+  // ADDS PROJECT TO MEMBER'S LIST
   addProject(projectId: string, changes: object) {
     this.projects.push(projectId);
 
     const memberProjectsPath = "members/" + this.id + "/projects";
 
-    // Lägg den uppdaterade listan bland ändringarna som ska sparas.
+    // ADDS UPDATED LIST TO CHANGES TO BE SAVED
     Object.assign(changes, {
       [memberProjectsPath]: this.projects,
     });

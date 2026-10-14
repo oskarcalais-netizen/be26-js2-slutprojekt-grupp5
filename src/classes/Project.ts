@@ -45,17 +45,17 @@ export class Project {
       tasks: this.tasks,
   }};
 
-    // Sparar projektet och medlemmarnas projektlistor tillsammans i Firebase.
+    // SAVES PROJECT WITH MEMBER PROJECT LISTS IN FIREBASE
   async save(changes: object) {
     const projectData = this.getData();
     const projectPath = "projects/" + this.id;
 
-    // Lägg projektets information bland ändringarna som ska sparas.
+    // ADDS PROJECT INFO TO CHANGES TO BE SAVED
     Object.assign(changes, {
       [projectPath]: projectData,
     });
 
-    // Spara alla samlade ändringar i Firebase.
+    // SAVE ALL COMPILED CHANGES TO FIREBASE
     const databaseRef = ref(db);
 
     await update(databaseRef, changes);
