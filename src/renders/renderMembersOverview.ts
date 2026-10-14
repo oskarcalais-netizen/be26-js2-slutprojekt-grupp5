@@ -36,7 +36,7 @@ export const renderMembers = (members: Record<string, Member>) => {
     message.hidden = true;
     message.style.color = "#fcd34d";
 
-    // Skapar delete knappen i varje member låda
+    // CREATES DELETE BUTTON
     const deleteMemberBtn = document.createElement("button");
 
     deleteMemberBtn.type = "button";

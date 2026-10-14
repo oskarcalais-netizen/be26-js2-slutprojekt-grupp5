@@ -3,7 +3,7 @@
 import "./Forms/newMember.ts";
 import "./Forms/newProject.ts";
 
-import { createElement, icons } from "lucide";
+import { getIcon } from "./ui/icons/icons.ts";
 
 import { onValue, ref } from "firebase/database";
 
@@ -20,13 +20,10 @@ import { Task } from "./classes/Task.ts";
 
 import type { Category, Priority, TaskStatus } from "./types/types.ts";
 
-import { filterAndSortProjects } from "./filtering/projectFilter";
-import type {
-  ProjectFilterOptions,
-  ProjectItem,
-} from "./filtering/projectFilter";
-import { filterAndSortTasks } from "./filtering/taskFilter";
-import type { TaskFilterOptions, TaskItem } from "./filtering/taskFilter";
+import { filterAndSortProjects } from './filtering/projectFilter.ts';
+import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
+import { filterAndSortTasks } from './filtering/taskFilter.ts';
+import type { TaskFilterOptions, TaskItem } from './filtering/taskFilter.ts';
 
 let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data
 let rawTasks: TaskItem[] = []; // <-- Placeholder: Load actual tasks data for active project
@@ -153,21 +150,18 @@ let tasks: Record<string, Task> = {};
 
 let activeProjectId: string | null = null;
 
-// BUTTON ICONS
+
+//BUTTONS
 
 const newProjectButton = document.getElementById("newprojectbtn");
-
 if (newProjectButton) {
-  const plusIconProject = createElement(icons.Plus);
-
+  const plusIconProject = getIcon("plus");
   newProjectButton.prepend(plusIconProject);
 }
 
 const newMemberButton = document.getElementById("newmemberbtn");
-
 if (newMemberButton) {
-  const plusIconMember = createElement(icons.Plus);
-
+  const plusIconMember = getIcon("plus");
   newMemberButton.prepend(plusIconMember);
 }
 
