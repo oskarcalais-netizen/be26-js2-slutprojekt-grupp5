@@ -66,3 +66,4 @@ This app is an assignment for the course Javascript 2, as part of the Backend pr
 • zana-feature-projectview
 • zana-member-project-classes
 • zana-member-project-forms
+• zana-add-newtask-button

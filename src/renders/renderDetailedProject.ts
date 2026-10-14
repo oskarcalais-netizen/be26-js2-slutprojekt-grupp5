@@ -17,7 +17,6 @@ export const renderDetailedProject = (
 
 
     // PROJECT DETAILS
-    
     projectDetails.innerHTML = "";
     projectDetails.className= "display flex flex-col gap-4 justify-center items-center"
 
@@ -138,7 +137,6 @@ export const renderDetailedProject = (
     projectDetails.append(projectBtnWrapper, projectMessage);
 
     // MEMBERS
-  
     projectMembers.innerHTML = "";
 
     project.members.forEach((memberId) => {

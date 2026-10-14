@@ -26,7 +26,7 @@ export class Task {
         {
           this.id = id; 
           this.title = capitalizeFirstLetter(title); 
-          this.description = description; 
+          this.description = capitalizeFirstLetter(description); 
           this.category = category; 
           this.priority = priority; 
           this.deadline = deadline; 
