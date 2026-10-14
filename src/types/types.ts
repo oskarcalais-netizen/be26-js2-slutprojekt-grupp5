@@ -47,3 +47,17 @@ export interface TaskItem {
   createdAt: string | Date;
   [key: string]: any;
 }
+
+export interface ProjectFilterOptions {
+  title?: string;
+  sortBy?: "title" | "deadline" | "createdAt";
+  sortOrder?: "asc" | "desc";
+}
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  deadline: string | Date;
+  createdAt: string | Date;
+  [key: string]: any;
+}

@@ -1,4 +1,5 @@
 import type { Member } from "../classes/Member";
+import type { Project } from "../classes/Project";
 
 const membersContainer = document.getElementById(
   "membersContainer",
@@ -7,7 +8,10 @@ const membersListContainer = document.getElementById(
   "memberList",
 ) as HTMLUListElement;
 
-export const renderMembers = (members: Record<string, Member>) => {
+export const renderMembers = (
+  members: Record<string, Member>,
+  projects: Record<string, Project> = {}
+) => {
   membersListContainer.innerHTML = "";
 
   Object.values(members).forEach((member) => {
@@ -23,8 +27,14 @@ export const renderMembers = (members: Record<string, Member>) => {
     memberCategory.textContent = `Categories: ${member.categories.join(", ")}`;
     memberCategory.className = "mb-2 text-sm text-slate-400";
 
+    const projectNames = (member.projects ?? [])
+      .map((projectId) => projects[projectId]?.title)
+      .filter((title): title is string => Boolean(title));
+
     const memberProject = document.createElement("p");
-    memberProject.textContent = `Projects: ${member.projects.length > 0 ? member.projects.join(", ") : "No available projects"}`;
+    memberProject.textContent = `Projects: ${
+      projectNames.length > 0 ? projectNames.join(", ") : "No available projects"
+    }`;
     memberProject.className = "mb-2 text-sm text-slate-400";
 
     const memberTasks = document.createElement("p") as HTMLParagraphElement;
@@ -43,7 +53,7 @@ export const renderMembers = (members: Record<string, Member>) => {
     deleteMemberBtn.textContent = "Delete member";
     deleteMemberBtn.className = "deleteMemberBtn";
 
-    // Skapar en extra fråga innan borttagningen av medlem i varje member låda
+    // CREATES A CONFIRMATION BEFORE DELETION OF MEMBER IN EACH MEMBER BOX
     const cancelDeleteBtn = document.createElement("button");
 
     cancelDeleteBtn.type = "button";
@@ -58,7 +68,7 @@ export const renderMembers = (members: Record<string, Member>) => {
         return;
       }
 
-      // Medlemmen ska inte kunna tas bort om den är kopplat till någon projekt
+      // MEMBER CANNOT BE DELETED IF CONNECTED TO A PROJECT
       if (member.projects.length > 0) {
         message.textContent =
           "This member belongs to a project and cannot be deleted.";

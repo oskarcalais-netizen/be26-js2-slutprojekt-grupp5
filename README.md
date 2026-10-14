@@ -52,7 +52,18 @@ This app is an assignment for the course Javascript 2, as part of the Backend pr
 ■ Main branches: _main > developer_
 
 ■ Supporting branches
-Name template: [developer]-[type]-[scope]-[name]
-Ex:
-• john-feature-css-global
-• jane-docs-readme-checklist
+
+• diana-feat/styling-overview-page-rendering-firebase
+• diana-feat-project-view
+• diana/feat-scrum-board-tasks
+
+• oskar-filtering-and-sorting-in-project-view
+• oskar-updated-filtering-functionality
+• oskar-refactoring-and-renaming-of-modules-and-folders
+• oskar-error-handling-and-validation
+• oskar-color-coding-for-deadlines-and-priority
+
+• zana-feature-projectview
+• zana-member-project-classes
+• zana-member-project-forms
+• zana-add-newtask-button

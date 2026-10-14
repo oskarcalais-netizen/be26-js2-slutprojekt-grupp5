@@ -15,7 +15,7 @@ const memberContainer = document.querySelector(
   "#memberContainer",
 ) as HTMLDivElement;
 
-// Visar formuläret för en ny medlem och kopplar knapparna till sina funktioner.
+// SHOWS FORM FOR NEW MEMBER AND CONNECTS BUTTONS TO THEIR RESPECTIVE FUNCTIONS
 function openMemberBox() {
   if (memberIsSaving === true) {
     return;
@@ -50,7 +50,7 @@ function openMemberBox() {
     "#memberCategories",
   ) as HTMLDivElement;
 
-  // Loopen tar en kategori från types.ts i taget och skapar ett alternativ
+  // LOOPS CATEGORIES FROM 'types.ts' AND CREATES AN OPTION
   for (let i = 0; i < categories.length; i++) {
     categoryContainer.innerHTML += `
     <label class= "projectMemberRow">
@@ -60,7 +60,7 @@ function openMemberBox() {
   `;
   }
 
-  // The button now exists because the HTML has been added.
+  // THE BUTTON NOW EXISTS BECAUSE THE HTML HAS BEEN ADDED
   const closeMemberBtn = document.querySelector(
     "#closeMemberBtn",
   ) as HTMLButtonElement;
@@ -74,7 +74,7 @@ function openMemberBox() {
   addMemberBtn.addEventListener("click", checkMember);
 }
 
-// Stänger medlemsformuläret
+// CLOSES MEMBER FORM
 function closeMemberBox() {
   if (memberIsSaving === true) {
     return;
@@ -85,7 +85,7 @@ function closeMemberBox() {
 
 newMemberBtn.addEventListener("click", openMemberBox);
 
-// Closes the "New member" box when the user clicks outside it.
+// CLOSES THE "New member" BOX WHEN THE USER CLICKS OUTSIDE IT
 memberContainer.addEventListener("click", (event) => {
   const background = memberContainer.querySelector(".formOverlay");
 
@@ -94,7 +94,7 @@ memberContainer.addEventListener("click", (event) => {
   }
 });
 
-// Skapar en medlem, sparar den och stänger formuläret när sparandet lyckas.
+// CREATES A MEMBER, SAVES IT AND CLOSES THE FORM UPON SUCCESSFUL SAVE
 async function saveMember(name: string, selectedCategories: string[]) {
   const message = document.querySelector(
     "#memberMessage",
@@ -139,7 +139,7 @@ async function saveMember(name: string, selectedCategories: string[]) {
   }, 1500);
 }
 
-// Kontrollerar namn och kategorier innan medlemmen sparas.
+// CHECKS NAME AND CATEGORIES BEFORE MEMBER IS SAVED
 function checkMember() {
   if (memberIsSaving === true) {
     return;
@@ -157,7 +157,7 @@ function checkMember() {
 
   const selectedCategories: string[] = [];
 
-  // Går igenom kryssrutorna och samlar de valda kategorierna.
+  // LOOPS THROUGH CHECKBOXES AND COMPILES THE CHOSEN CATEGORIES
   for (let i = 0; i < checkboxes.length; i++) {
     const checkbox = checkboxes[i] as HTMLInputElement;
 

@@ -1,14 +1,9 @@
-//För testning av Firebase Realtime Database
-//Dessa "funktioner" används för att hämta data från Firebase och eventuella uppdateringar hämtas i realtid.
-
-import { openNewTaskModal } from "./add/newTask.ts";
+import { openNewTaskModal } from "./Forms/newTask.ts";
 import "./Forms/newMember.ts";
 import "./Forms/newProject.ts";
 
 import { getIcon } from "./ui/icons/icons.ts";
-
 import { onValue, ref } from "firebase/database";
-
 import { db } from "./firebaseconfig.ts";
 
 import { renderProjects } from "./renders/renderProjectsOverview.ts";
@@ -20,88 +15,17 @@ import { Project } from "./classes/Project.ts";
 import { Member } from "./classes/Member.ts";
 import { Task } from "./classes/Task.ts";
 
-import type { Category, Priority, TaskStatus } from "./types/types.ts";
-
-import { filterAndSortProjects } from './filtering/projectFilter.ts';
-import type { ProjectFilterOptions, ProjectItem } from './filtering/projectFilter.ts';
-import { filterAndSortTasks } from './filtering/taskFilter.ts';
-import type { TaskFilterOptions, TaskItem } from './types/types.ts';
-
-let rawProjects: ProjectItem[] = []; // <-- Placeholder: Load actual project data
-let rawTasks: TaskItem[] = []; // <-- Placeholder: Load actual tasks data for active project
-
-function getProjectFilterState(): ProjectFilterOptions {
-  const searchInput = document.getElementById(
-    "projectSearchInput",
-  ) as HTMLInputElement;
-  const sortBySelect = document.getElementById(
-    "projectSortBySelect",
-  ) as HTMLSelectElement;
-  const sortOrderSelect = document.getElementById(
-    "projectSortOrderSelect",
-  ) as HTMLSelectElement;
-
-  return {
-    title: searchInput?.value || undefined,
-    sortBy:
-      (sortBySelect?.value as ProjectFilterOptions["sortBy"]) || "createdAt",
-    sortOrder:
-      (sortOrderSelect?.value as ProjectFilterOptions["sortOrder"]) || "asc",
-  };
-}
-
-function updateAndRenderProjects(): void {
-  const options = getProjectFilterState();
-  const filteredProjects = filterAndSortProjects(rawProjects, options);
-
-  renderProjectsList(filteredProjects); // <-- Placeholder: Call rendering function
-}
-
-function getTaskFilterState(): TaskFilterOptions {
-  const searchInput = document.getElementById(
-    "taskSearchInput",
-  ) as HTMLInputElement;
-  const prioritySelect = document.getElementById(
-    "taskPrioritySelect",
-  ) as HTMLSelectElement;
-  const sortBySelect = document.getElementById(
-    "taskSortBySelect",
-  ) as HTMLSelectElement;
-  const sortOrderSelect = document.getElementById(
-    "taskSortOrderSelect",
-  ) as HTMLSelectElement;
-
-  return {
-    title: searchInput?.value || undefined,
-    priority: prioritySelect?.value
-      ? (prioritySelect.value as TaskFilterOptions["priority"])
-      : undefined,
-    sortBy: (sortBySelect?.value as TaskFilterOptions["sortBy"]) || "createdAt",
-    sortOrder:
-      (sortOrderSelect?.value as TaskFilterOptions["sortOrder"]) || "asc",
-  };
-}
-
-function updateAndRenderTasks(): void {
-  const options = getTaskFilterState();
-  const filteredTasks = filterAndSortTasks(rawTasks, options);
-
-  renderScrumBoardTasks(filteredTasks); // <-- Placeholder: Call rendering function
-}
-
-function initializeProjectFilterListeners(): void {
-  const searchInput = document.getElementById("projectSearchInput");
-  const sortBySelect = document.getElementById("projectSortBySelect");
-  const sortOrderSelect = document.getElementById("projectSortOrderSelect");
-
-  searchInput?.addEventListener("input", updateAndRenderProjects);
-  sortBySelect?.addEventListener("change", updateAndRenderProjects);
-  sortOrderSelect?.addEventListener("change", updateAndRenderProjects);
-}
+import {
+  categories as VALID_CATEGORIES,
+  PRIORITIES,
+  type Category,
+  type Priority,
+  type TaskStatus,
+} from "./types/types.ts";
 
 function updatePrioritySelectColor(): void {
   const prioritySelect = document.getElementById(
-    "taskPrioritySelect",
+    "taskPrioritySelect"
   ) as HTMLSelectElement | null;
   if (!prioritySelect) return;
 
@@ -116,34 +40,17 @@ function updatePrioritySelectColor(): void {
 
 function initializeTaskFilterListeners(): void {
   const prioritySelect = document.getElementById("taskPrioritySelect");
-
-  prioritySelect?.addEventListener("change", () => {
-    updatePrioritySelectColor();
-    updateAndRenderTasks();
-  });
-
-  // <-- Placeholder: Add remaining task filter event listeners here
-}
-
-function renderProjectsList(_projects: ProjectItem[]): void {
-  // <-- Placeholder: Insert rendering logic to populate #projectList
-}
-
-function renderScrumBoardTasks(_tasks: TaskItem[]): void {
-  // <-- Placeholder: Insert rendering logic to populate #newTasks, #inProgressTasks, etc.
+  prioritySelect?.addEventListener("change", updatePrioritySelectColor);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initializeProjectFilterListeners();
   initializeTaskFilterListeners();
 });
 
 const overviewView = document.getElementById("overviewView") as HTMLElement;
-
 const projectView = document.getElementById("projectView") as HTMLElement;
-
 const backToOverviewBtn = document.getElementById(
-  "backToOverviewBtn",
+  "backToOverviewBtn"
 ) as HTMLButtonElement;
 
 let projects: Record<string, Project> = {};
@@ -152,9 +59,7 @@ let tasks: Record<string, Task> = {};
 
 let activeProjectId: string | null = null;
 
-
-//BUTTONS
-
+// BUTTONS
 const newProjectButton = document.getElementById("newprojectbtn");
 if (newProjectButton) {
   const plusIconProject = getIcon("plus");
@@ -168,7 +73,6 @@ if (newMemberButton) {
 }
 
 const newTaskButton = document.getElementById("newtaskbtn");
-
 if (newTaskButton) {
   const plusIconTask = getIcon("plus");
   newTaskButton.prepend(plusIconTask);
@@ -180,57 +84,60 @@ if (newTaskButton) {
   });
 }
 
-
-//Firebase
+// FIREBASE REFS
 const projectsRef = ref(db, "projects");
 const membersRef = ref(db, "members");
 const tasksRef = ref(db, "tasks");
 
-const VALID_PRIORITIES: Priority[] = ["low", "moderate", "high", "critical"];
-const VALID_CATEGORIES: Category[] = ["UI/UX Design", "Backend Development", "QA", "Git Administration", "Frontend Development", "Database Management"];
+const VALID_PRIORITIES: Priority[] =
+  (PRIORITIES as Priority[]) || [
+    "low",
+    "moderate",
+    "high",
+    "critical",
+    "Low",
+    "Moderate",
+    "High",
+    "Critical",
+  ];
 
-const createTaskFromFirebase = (
-    id: string,
-    data: any
-): Task => {
-    const safePriority: Priority = VALID_PRIORITIES.includes(data.priority) 
-        ? data.priority 
-        : "Low";
+const createTaskFromFirebase = (id: string, data: any): Task => {
+  const safePriority: Priority = (VALID_PRIORITIES as string[]).includes(
+    data.priority
+  )
+    ? data.priority
+    : "Low";
 
-    const safeCategory: Category = (VALID_CATEGORIES as readonly string[]).includes(data.category)
-        ? (data.category as Category)
-        : (data.category as Category) || "Frontend";
+  const safeCategory: Category = (
+    VALID_CATEGORIES as readonly string[]
+  ).includes(data.category)
+    ? (data.category as Category)
+    : "Frontend Development";
 
-    const task = new Task(
-        id,
-        data.title?.trim() || "Untitled Task",
-        data.description?.trim() || "No description provided.",
-        safeCategory,
-        safePriority,
-        data.deadline || new Date().toISOString().split("T")[0],
-        data.projectId ?? data.projektId ?? ""
-    );
+  const task = new Task(
+    id,
+    data.title?.trim() || "Untitled Task",
+    data.description?.trim() || "No description provided.",
+    safeCategory,
+    safePriority,
+    data.deadline || new Date().toISOString().split("T")[0],
+    data.projectId ?? data.projektId ?? ""
+  );
 
-    task.created = data.created || new Date().toISOString();
-    (task as any).createdAt = data.created || new Date().toISOString();
-    task.status = (data.status ?? "new") as TaskStatus;
-    task.assignedTo = data.assignedTo || null;
-    task.completedAt = data.completedAt || null;
+  task.created = data.created || new Date().toISOString();
+  task.status = (data.status ?? "new") as TaskStatus;
+  task.assignedTo = data.assignedTo || null;
+  task.completedAt = data.completedAt || null;
 
-    return task;
+  return task;
 };
 
 // OPEN PROJECT
-
 function openProject(projectId: string) {
   const project = projects[projectId];
-
-  if (!project) {
-    return;
-  }
+  if (!project) return;
 
   overviewView?.classList.add("hidden");
-
   projectView?.classList.remove("hidden");
 
   activeProjectId = projectId;
@@ -240,28 +147,19 @@ function openProject(projectId: string) {
 }
 
 // RENDER ACTIVE PROJECT
-
 function renderProject() {
-  if (!activeProjectId) {
-    return;
-  }
+  if (!activeProjectId) return;
 
   const project = projects[activeProjectId];
-
-  if (!project) {
-    return;
-  }
+  if (!project) return;
 
   renderDetailedProject(project, members, tasks);
-
   renderScrumBoard(project, members, tasks);
 }
 
 // BACK TO OVERVIEW
-
 backToOverviewBtn.addEventListener("click", () => {
   activeProjectId = null;
-
   projectView.classList.add("hidden");
   overviewView.classList.remove("hidden");
 });
@@ -279,13 +177,13 @@ onValue(projectsRef, (snapshot) => {
         projectData.description,
         projectData.deadline,
         projectData.members ?? [],
-        projectData.tasks ?? [],
+        projectData.tasks ?? []
       ),
-    ]),
+    ])
   );
 
   renderProjects(projects, openProject);
-
+  renderMembers(members, projects);
   renderProject();
 });
 
@@ -301,13 +199,12 @@ onValue(membersRef, (snapshot) => {
         memberData.name,
         memberData.categories ?? [],
         memberData.ongoingTasks ?? [],
-        memberData.projects ?? [],
+        memberData.projects ?? []
       ),
-    ]),
+    ])
   );
 
-  renderMembers(members);
-
+  renderMembers(members, projects);
   renderProject();
 });
 
@@ -319,7 +216,7 @@ onValue(tasksRef, (snapshot) => {
     Object.entries(data).map(([id, taskData]) => [
       id,
       createTaskFromFirebase(id, taskData),
-    ]),
+    ])
   );
 
   renderProject();

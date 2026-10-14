@@ -59,7 +59,11 @@ export const renderScrumBoard = (
   inReviewTasksContainer.innerHTML = "";
   completedTasksContainer.innerHTML = "";
 
-  const filterOptions: TaskFilterOptions = {
+  const projectMembers: Record<string, Member> = {
+  ...members,
+};
+
+    const filterOptions: TaskFilterOptions = {
     title: taskSearchInput?.value.trim(),
     priority: (taskPrioritySelect?.value || undefined) as Priority | undefined,
     sortBy: (taskSortBySelect?.value || "createdAt") as TaskSortBy,
@@ -73,25 +77,25 @@ export const renderScrumBoard = (
     switch (task.status) {
       case "new":
         newTasksContainer.appendChild(
-          renderNewTaskColumn(task, project, members)
+          renderNewTaskColumn(task, project, projectMembers)
         );
         break;
 
       case "in-progress":
         inProgressTasksContainer.appendChild(
-          renderInProgressTaskColumn(task, members)
+          renderInProgressTaskColumn(task, projectMembers)
         );
         break;
 
       case "in-review":
         inReviewTasksContainer.appendChild(
-          renderInReviewTaskColumn(task, members)
+          renderInReviewTaskColumn(task, projectMembers)
         );
         break;
 
       case "completed":
         completedTasksContainer.appendChild(
-          renderCompletedTaskColumn(task, project, members)
+          renderCompletedTaskColumn(task, project, projectMembers)
         );
         break;
     }
