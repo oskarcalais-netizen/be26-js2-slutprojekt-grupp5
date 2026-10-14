@@ -9,7 +9,7 @@ const taskContainer = document.querySelector(
   "#taskContainer",
 ) as HTMLDivElement;
 
-// Visar formuläret och kopplar knapparna till sina funktioner.
+// SHOWS THE FORM AND CONNECTS THE BUTTONS TO THEIR FUNCTIONS
 export function openNewTaskModal(projectId: string) {
   if (taskIsSaving === true) {
     return;
@@ -60,6 +60,7 @@ export function openNewTaskModal(projectId: string) {
   ) as HTMLSelectElement;
 
   // Skapar ett alternativ för varje kategori i types.ts
+  // CREATES AN OPTION FOR EACH CATEGORY IN 'types.ts'
   for (let i = 0; i < categories.length; i++) {
     const option = document.createElement("option");
 
@@ -80,7 +81,7 @@ export function openNewTaskModal(projectId: string) {
   addTaskBtn.addEventListener("click", checkTask);
 }
 
-// Stänger formuläret när ingen sparning pågår.
+// CLOSES THE FORM WHEN THERE IS NO SAVING ACTIVITY
 function closeTaskBox() {
   if (taskIsSaving === true) {
     return;
@@ -90,7 +91,7 @@ function closeTaskBox() {
   currentProjectId = null;
 }
 
-// Stänger formuläret om användaren klickar på bakgrunden.
+// CLOSES THE FORM IF THE USER CLICKS ON THE BACKGROUND
 taskContainer.addEventListener("click", (event) => {
   const background = taskContainer.querySelector(".formOverlay");
 
@@ -99,7 +100,7 @@ taskContainer.addEventListener("click", (event) => {
   }
 });
 
-// Kontrollerar fälten innan uppgiften sparas.
+// CHECKS THE FIELDS BEFORE TASK IS SAVED
 function checkTask() {
   if (taskIsSaving === true) {
     return;
@@ -149,7 +150,7 @@ function checkTask() {
 
   let categoryIsValid = false;
 
-  // Checks that the category exists in types.ts
+  // CHECKS THAT THE CATEGORY EXISTS IN 'types.ts'
   for (let i = 0; i < categories.length; i++) {
     if (category === categories[i]) {
       categoryIsValid = true;
@@ -204,7 +205,7 @@ function checkTask() {
   );
 }
 
-// Saves the task and links it to the open project.
+// SAVES THE TASK AND LINKS IT TO THE OPEN PROJECT
 async function saveTask(
   title: string,
   description: string,
@@ -263,7 +264,7 @@ async function saveTask(
     errorMessage.textContent = "Failed to save task to database. Try again.";
   }
 
-  // Resets the button if saving failed.
+  // RESETS THE BUTTON IF SAVING FAILS
   if (taskIsSaving === true) {
     taskIsSaving = false;
     addTaskBtn.disabled = false;
