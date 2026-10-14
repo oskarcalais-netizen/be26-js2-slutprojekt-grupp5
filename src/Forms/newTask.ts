@@ -198,12 +198,12 @@ form.addEventListener("submit", async (e) => {
       completedAt: null,
     };
 
-    // Fetches existing tasks for active project
+    // FETCHES EXISTING TASKS FOR ACTIVE PROJECT
     const projectTasksRef = ref(db, `projects/${currentProjectId}/tasks`);
     const snapshot = await get(projectTasksRef);
     const existingTasks: string[] = snapshot.exists() ? snapshot.val() : [];
 
-    // Atomic multi-path update in Firebase
+    // ATOMIC MULTI-PATH UPDATE IN FIREBASE
     const updates: Record<string, any> = {};
     updates[`/tasks/${taskId}`] = newTaskData;
     updates[`/projects/${currentProjectId}/tasks`] = [...existingTasks, taskId];

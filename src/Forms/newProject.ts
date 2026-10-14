@@ -14,7 +14,7 @@ const projectContainer = document.querySelector(
   "#projectContainer",
 ) as HTMLDivElement;
 
-// Visar projektformuläret, kopplar knapparna och hämtar medlemmarna.
+// SHOWS PROJECT FORM, CONNECTS BUTTONS AND FETCHES MEMBERS
 function openProjectBox() {
   if (projectIsSaving === true) {
     return;
@@ -68,7 +68,7 @@ function openProjectBox() {
   loadProjectMembers();
 }
 
-// Stänger projektformuläret
+// CLOSES PROJECT FORM
 function closeProjectBox() {
   if (projectIsSaving === true) {
     return;
@@ -79,7 +79,7 @@ function closeProjectBox() {
 
 newProjectBtn.addEventListener("click", openProjectBox);
 
-// Stänger rutan när användaren klickar utanför den.
+// CLOSES BOX WHEN USER CLICKS OUTSIDE IT
 projectContainer.addEventListener("click", (event) => {
   const background = projectContainer.querySelector(".formOverlay");
 
@@ -88,7 +88,7 @@ projectContainer.addEventListener("click", (event) => {
   }
 });
 
-// Hämtar medlemmarna från Firebase och visar dem som kryssrutor.
+// FETCHES MEMBERS FROM FIREBASE AND DISPLAYS THEM AS CHECKBOXES
 async function loadProjectMembers() {
   const memberOptions = document.querySelector(
     "#projectMemberOptions",
@@ -116,7 +116,7 @@ async function loadProjectMembers() {
       return;
     }
 
-    // Skapar en kryssruta för varje medlem som hämtats från Firebase.
+    // CREATES A CHECKBOX FOR EACH MEMBER FETCHED FROM FIREBASE
     for (const memberId in members) {
       const member = members[memberId];
 
@@ -145,7 +145,7 @@ async function loadProjectMembers() {
   }
 }
 
-// Skapar projektet
+// CREATES PROJECT
 async function saveProject(
   name: string,
   description: string,
@@ -188,10 +188,10 @@ async function saveProject(
         selectedMembers,
       );
 
-      // Samla alla ändringar innan något sparas.
+      // COMPILES ALL CHANGES BEFORE ANYTHING IS SAVED
       const changes = {};
 
-      // Gå igenom en vald medlem i taget.
+      // LOOPS THROUGH ONE CHOSEN MEMBER AT A TIME
       for (let i = 0; i < selectedMembers.length; i++) {
         const memberId = selectedMembers[i];
 
@@ -217,11 +217,11 @@ async function saveProject(
           member.projects,
         );
 
-        // Lägg det nya projektets id i medlemmens lista
+        // ADDS THE NEW PROJECT ID TO MEMBER'S LIST
         selectedMember.addProject(projectId, changes);
       }
 
-      // Spara projektet och medlemskopplingarna tillsammans.
+      // SAVES PROJECT WITH MEMBER CONNECTIONS
       await project.save(changes);
 
       projectIsSaving = false;
@@ -237,7 +237,7 @@ async function saveProject(
   }, 1500);
 }
 
-// Kontrollerar projektets fält och valda medlemmar innan sparandet.
+// CHECKS PROJECT FIELD AND CHOSEN MEMBERS BEFORE SAVE
 function checkProject() {
   if (projectIsSaving === true) {
     return;
@@ -281,13 +281,12 @@ function checkProject() {
     return;
   }
 
-  // Kontrollen för deadline behövs fixas, ej hunnit med!
   if (deadline === "") {
     message.textContent = "Choose a deadline.";
     return;
   }
 
-  // Räknar de valda medlemmarna
+  // COUNTS THE CHOSEN MEMBERS
   for (let i = 0; i < memberCheckboxes.length; i++) {
     const checkbox = memberCheckboxes[i] as HTMLInputElement;
 

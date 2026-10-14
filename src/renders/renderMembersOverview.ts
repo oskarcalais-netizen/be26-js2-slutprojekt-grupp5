@@ -53,7 +53,7 @@ export const renderMembers = (
     deleteMemberBtn.textContent = "Delete member";
     deleteMemberBtn.className = "deleteMemberBtn";
 
-    // Skapar en extra fråga innan borttagningen av medlem i varje member låda
+    // CREATES A CONFIRMATION BEFORE DELETION OF MEMBER IN EACH MEMBER BOX
     const cancelDeleteBtn = document.createElement("button");
 
     cancelDeleteBtn.type = "button";
@@ -68,7 +68,7 @@ export const renderMembers = (
         return;
       }
 
-      // Medlemmen ska inte kunna tas bort om den är kopplat till någon projekt
+      // MEMBER CANNOT BE DELETED IF CONNECTED TO A PROJECT
       if (member.projects.length > 0) {
         message.textContent =
           "This member belongs to a project and cannot be deleted.";

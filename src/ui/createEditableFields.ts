@@ -43,7 +43,7 @@ export const createEditableFields = (task: Task) => {
   prioritySelect.className =
     "mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100";
 
-  // Fyll rullistan med de centrala prioriteringsalternativen ("Low", "Moderate", "High", "Critical")
+  // FILLS DROPDOWN-LIST WITH CENTRAL PRIORITY OPTIONS ("Low", "Moderate", "High", "Critical")
   PRIORITIES.forEach((priority) => {
     const option = document.createElement("option");
     option.value = priority;
