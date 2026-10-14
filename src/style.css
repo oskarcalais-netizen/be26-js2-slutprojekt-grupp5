@@ -8,7 +8,17 @@ h1 img {
   height: 68px;
 }
 
-/* Det mörka lagret bakom boxen. */
+h2 {
+  color: #7c86ff;
+  font-variant-caps: small-caps;
+}
+
+#backToOverviewBtn {
+  font-weight: 700;
+  font-variant-caps: small-caps;
+  font-size: 1.125rem;
+}
+/* DARK LAYER BEHIND BOX */
 .formOverlay {
   position: fixed;
   inset: 0;

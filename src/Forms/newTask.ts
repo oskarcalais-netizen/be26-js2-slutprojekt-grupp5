@@ -60,10 +60,10 @@ dialog.innerHTML = `
           id="newTaskPriority"
           class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="Low">Low</option>
-          <option value="Moderate">Moderate</option>
-          <option value="High">High</option>
-          <option value="Critical">Critical</option>
+          <option value="low">Low</option>
+          <option value="moderate">Moderate</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
         </select>
       </div>
     </div>

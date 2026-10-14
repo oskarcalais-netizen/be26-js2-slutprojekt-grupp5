@@ -59,15 +59,11 @@ export const renderScrumBoard = (
   inReviewTasksContainer.innerHTML = "";
   completedTasksContainer.innerHTML = "";
 
-  // CREATE PROJECT MEMBERS
-  const projectMembers: Record<string, Member> = {};
-  project.members.forEach((memberId) => {
-    if (members[memberId]) {
-      projectMembers[memberId] = members[memberId];
-    }
-  });
+  const projectMembers: Record<string, Member> = {
+  ...members,
+};
 
-  const filterOptions: TaskFilterOptions = {
+    const filterOptions: TaskFilterOptions = {
     title: taskSearchInput?.value.trim(),
     priority: (taskPrioritySelect?.value || undefined) as Priority | undefined,
     sortBy: (taskSortBySelect?.value || "createdAt") as TaskSortBy,

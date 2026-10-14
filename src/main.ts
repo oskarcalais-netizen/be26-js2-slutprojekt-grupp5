@@ -85,7 +85,7 @@ function updateAndRenderTasks(): void {
   const options = getTaskFilterState();
   const filteredTasks = filterAndSortTasks(rawTasks, options);
 
-  renderScrumBoardTasks(filteredTasks); // <-- Placeholder: Call rendering function
+  renderScrumBoardTasks(filteredTasks);
 }
 
 function initializeProjectFilterListeners(): void {
@@ -283,7 +283,7 @@ onValue(projectsRef, (snapshot) => {
   );
 
   renderProjects(projects, openProject);
-
+  renderMembers(members, projects);
   renderProject();
 });
 
@@ -304,7 +304,7 @@ onValue(membersRef, (snapshot) => {
     ]),
   );
 
-  renderMembers(members);
+  renderMembers(members, projects);
 
   renderProject();
 });

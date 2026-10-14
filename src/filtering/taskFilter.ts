@@ -1,5 +1,26 @@
-import type { TaskItem, TaskFilterOptions } from "../types/types";
+import type { Priority, TaskSortBy } from "../types/types";
 import { compareDates } from "../utils/formatDate";
+
+export interface TaskFilterOptions {
+  title?: string;
+  priority?: Priority;
+  assignedMemberId?: string;
+  category?: string;
+  sortBy?: TaskSortBy;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface TaskItem {
+  id: string;
+  title: string;
+  priority: Priority;
+  assignedMemberId?: string;
+  assignedMemberName?: string;
+  category: string;
+  deadline: string | Date;
+  createdAt: string | Date;
+  [key: string]: any;
+}
 
 const PRIORITY_WEIGHTS: Record<string, number> = {
   low: 1,
@@ -37,7 +58,7 @@ export function filterAndSortTasks(
     return true;
   });
 
-  return filteredTasks.sort((a, b) => {
+  return [...filteredTasks].sort((a, b) => {
     let comparison = 0;
 
     switch (sortBy) {
@@ -46,14 +67,16 @@ export function filterAndSortTasks(
         break;
 
       case "priority": {
-        const weightA = PRIORITY_WEIGHTS[a.priority.toLowerCase()] || 0;
-        const weightB = PRIORITY_WEIGHTS[b.priority.toLowerCase()] || 0;
+        const weightA = PRIORITY_WEIGHTS[(a.priority || "").toLowerCase()] || 0;
+        const weightB = PRIORITY_WEIGHTS[(b.priority || "").toLowerCase()] || 0;
         comparison = weightA - weightB;
         break;
       }
 
       case "assignedMember":
-        comparison = (a.assignedMemberName || "").localeCompare(b.assignedMemberName || "");
+        comparison = (a.assignedMemberName || "").localeCompare(
+          b.assignedMemberName || ""
+        );
         break;
 
       case "category":
