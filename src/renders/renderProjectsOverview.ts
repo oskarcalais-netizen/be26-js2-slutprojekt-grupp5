@@ -1,4 +1,5 @@
-import { filterAndSortProjects, type ProjectFilterOptions, type ProjectItem } from '../filtering/projectFilter.ts';
+import { filterAndSortProjects } from '../filtering/projectFilter.ts';
+import type { ProjectItem, ProjectFilterOptions } from "../types/types";
 import type { Project } from "../classes/Project.ts";
 import {getDeadlineInfo} from "../utils/getDeadlineInfo.ts"
 
@@ -68,29 +69,8 @@ export const renderProjects = (projects: Record<string, Project>, onProjectClick
     "mb-2 text-sm text-slate-300";
 
        const projectDeadlineEl = document.createElement("p");
-       projectDeadlineEl.textContent = `Deadline: ${deadlineInfo.formattedDeadline} · ${deadlineInfo.deadlineText}`;
-       
-       switch (deadlineInfo.deadlineStatus) {
-            case "overdue":
-                projectDeadlineEl.className =
-                    "mt-4 border-t border-slate-700 pt-4 text-sm font-medium text-red-400";
-                break;
-
-            case "today":
-                projectDeadlineEl.className =
-                    "mt-4 border-t border-slate-700 pt-4 text-sm font-medium text-orange-400";
-                break;
-
-            case "soon":
-                projectDeadlineEl.className =
-                    "mt-4 border-t border-slate-700 pt-4 text-sm font-medium text-yellow-400";
-                break;
-
-            case "normal":
-                projectDeadlineEl.className =
-                    "mt-4 border-t border-slate-700 pt-4 text-sm font-medium text-green-400";
-                break;
-       }
+       projectDeadlineEl.textContent = deadlineInfo.text;
+       projectDeadlineEl.className = `mt-4 border-t border-slate-700 pt-4 text-sm font-semibold ${deadlineInfo.colorClass}`;
 
        projectListContainer.append(
            projectTitleEl,

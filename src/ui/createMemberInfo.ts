@@ -28,7 +28,7 @@ export const createMemberSelection = (task: Task, project: Project, members: Rec
     memberSelectEl.appendChild(defaultOption);
 
    Object.values(members).forEach((member) => {
-    // Visa endast medlemmar med rätt kategori.
+    // SHOWS ONLY MEMBERS WITH MATCHING CATEGORY
     if (!member.categories.includes(task.category)) {
         return;
     }
@@ -52,18 +52,18 @@ export const createMemberSelection = (task: Task, project: Project, members: Rec
 
   const member = members[memberId];
 
-  // Kontrollera kategorin igen innan vi sparar.
+  // CHECKS CATEGORY AGAIN BEFORE SAVE
   if (!member || !member.categories.includes(task.category)) {
-    alert("Medlemmen har inte rätt kategori för uppgiften.");
+    alert("This member does not match the category of the task.");
     return;
   }
 
   const changes: Record<string, unknown> = {
-    // Tilldela uppgiften och flytta den till In-progress
+    // ASSIGNS TASK AND MOVES IT TO IN-PROGRESS
     [`tasks/${task.id}/assignedTo`]: memberId,
     [`tasks/${task.id}/status`]: "in-progress",
 
-    // Lägg till uppgiften i medlemmens pågående uppgifter
+    // ADDS TASK TO MEMBER'S ONGOING TASKS
     [`members/${memberId}/ongoingTasks`]: [
         ...new Set([
             ...(member.ongoingTasks ?? []),
@@ -71,7 +71,7 @@ export const createMemberSelection = (task: Task, project: Project, members: Rec
         ])
     ],
 
-    // Lägg till medlemmen i projektet
+    // ADDS MEMBER TO PROJECT
     [`projects/${project.id}/members`]: [
         ...new Set([
             ...(project.members ?? []),
@@ -79,7 +79,7 @@ export const createMemberSelection = (task: Task, project: Project, members: Rec
         ])
     ],
 
-    // Lägg till projektet i medlemmens projektlista
+    // ADDS PROJECT TO MEMBER'S PROJECT LIST
     [`members/${memberId}/projects`]: [
         ...new Set([
             ...(member.projects ?? []),
@@ -88,8 +88,8 @@ export const createMemberSelection = (task: Task, project: Project, members: Rec
     ]
 };
 
-  // Om uppgiften tidigare var tilldelad någon annan,
-  // ta bort uppgifts-ID:t från den personens lista.
+  // IF THE TASK WAS PREVIOUSLY ASSIGNED TO SOMEONE ELSE,
+  // REMOVES TASK ID FROM THAT MEMBER'S LIST
   if (task.assignedTo && task.assignedTo !== memberId) {
     const previousMember = members[task.assignedTo];
 

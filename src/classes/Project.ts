@@ -20,7 +20,7 @@ export class Project {
   ) {
     this.id = id;
     this.title = capitalizeFirstLetter(title);
-    this.description = description;
+    this.description = capitalizeFirstLetter(description);
     this.deadline = deadline;
     this.members = members;
     this.tasks = tasks;

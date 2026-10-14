@@ -1,14 +1,32 @@
-import type { TaskItem , TaskFilterOptions } from "../types/types";
+import type { Priority, TaskSortBy } from "../types/types";
+import { compareDates } from "../utils/formatDate";
+
+export interface TaskFilterOptions {
+  title?: string;
+  priority?: Priority;
+  assignedMemberId?: string;
+  category?: string;
+  sortBy?: TaskSortBy;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface TaskItem {
+  id: string;
+  title: string;
+  priority: Priority;
+  assignedMemberId?: string;
+  assignedMemberName?: string;
+  category: string;
+  deadline: string | Date;
+  createdAt: string | Date;
+  [key: string]: any;
+}
 
 const PRIORITY_WEIGHTS: Record<string, number> = {
   low: 1,
-  Low: 1,
   moderate: 2,
-  Moderate: 2,
   high: 3,
-  High: 3,
   critical: 4,
-  Critical: 4
 };
 
 export function filterAndSortTasks(
@@ -20,8 +38,8 @@ export function filterAndSortTasks(
     priority,
     assignedMemberId,
     category,
-    sortBy = 'createdAt',
-    sortOrder = 'asc'
+    sortBy = "createdAt",
+    sortOrder = "asc",
   } = options;
 
   const filteredTasks = tasks.filter((task) => {
@@ -44,43 +62,36 @@ export function filterAndSortTasks(
     let comparison = 0;
 
     switch (sortBy) {
-      case 'title':
-        comparison = (a.title || '').localeCompare(b.title || '');
+      case "title":
+        comparison = (a.title || "").localeCompare(b.title || "");
         break;
 
-      case 'priority': {
-        const weightA = PRIORITY_WEIGHTS[a.priority] || 0;
-        const weightB = PRIORITY_WEIGHTS[b.priority] || 0;
+      case "priority": {
+        const weightA = PRIORITY_WEIGHTS[(a.priority || "").toLowerCase()] || 0;
+        const weightB = PRIORITY_WEIGHTS[(b.priority || "").toLowerCase()] || 0;
         comparison = weightA - weightB;
         break;
       }
 
-      case 'assignedMember': {
-        const memberA = a.assignedMemberName || '';
-        const memberB = b.assignedMemberName || '';
-        comparison = memberA.localeCompare(memberB);
-        break;
-      }
-
-      case 'category':
-        comparison = (a.category || '').localeCompare(b.category || '');
+      case "assignedMember":
+        comparison = (a.assignedMemberName || "").localeCompare(
+          b.assignedMemberName || ""
+        );
         break;
 
-      case 'deadline': {
-        const timeA = a.deadline ? new Date(a.deadline).getTime() : 0;
-        const timeB = b.deadline ? new Date(b.deadline).getTime() : 0;
-        comparison = (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
+      case "category":
+        comparison = (a.category || "").localeCompare(b.category || "");
         break;
-      }
 
-      case 'createdAt': {
-        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        comparison = (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
+      case "deadline":
+        comparison = compareDates(a.deadline, b.deadline);
         break;
-      }
+
+      case "createdAt":
+        comparison = compareDates(a.createdAt, b.createdAt);
+        break;
     }
 
-    return sortOrder === 'desc' ? -comparison : comparison;
+    return sortOrder === "desc" ? -comparison : comparison;
   });
 }
